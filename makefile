@@ -6,7 +6,7 @@
 #    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/07/01 18:27:53 by tpereira         ###   ########.fr        #
+#    Updated: 2022/07/02 16:26:41 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ PHILO	=	philo
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 SRCS	=	./srcs/*.c
-INC		=	-Iincludes
+INC		=	./includes/*.h
 MAKEFLAGS += --silent
 
 all:
