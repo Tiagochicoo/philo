@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/03 21:20:58 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/03 21:35:49 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 
 typedef struct s_data
 {
-	int				i;
-	int				num;
-	int				forks;
-	pthread_t		*philos;
-	pthread_mutex_t	*lock;
-
+	int					i;
+	int					num;
+	int					forks;
+	pthread_t			*philos;
+	pthread_mutex_t		*mutex;
 }			t_data;
 
 void	*eat(t_data *data)
 {
 	//printf("Philosopher %d is waiting!\n", data->i);
-	pthread_mutex_lock(data->lock);
+	//pthread_mutex_lock(data->mutex);
 	printf("Philosopher %d is eating spaghetti!\n", data->i);
 	printf("Philosopher %d put down forks!\n", data->i);
-	pthread_mutex_unlock(data->lock);
+	//pthread_mutex_unlock(data->mutex);
 	return (NULL);
 }
 
@@ -42,8 +41,8 @@ int main(int argc, char **argv)
 		i = 0;
 		data.num = atoi(argv[1]);
 		data.forks = data.num;
-		data.philos = malloc(sizeof(pthread_t) * data.num);
-		pthread_mutex_init(data.lock, NULL);
+		data.philos = malloc(sizeof(pthread_t) * data.num - 1);
+		pthread_mutex_init(data.mutex, NULL);
 		while (i < data.num)
 		{
 			data.i = i;
@@ -57,7 +56,7 @@ int main(int argc, char **argv)
 		// 	i++;
 		// }
 		pthread_exit(0);
-		pthread_mutex_destroy(data.lock);
+		pthread_mutex_destroy(data.mutex);
 		free(data.philos);
 	}
 	else

@@ -6,7 +6,7 @@
 #    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/07/02 16:26:41 by tpereira         ###   ########.fr        #
+#    Updated: 2022/07/03 21:23:13 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ all:
 	printf "\e[38;5;46m ╚════════════════════════════════════╝\e[0m\n"
 
 cc:	all
-	time ./philo
+	time ./philo 3 1 2 3
 
 clean :
 	rm -rf ./srcs/*.o
