@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/02 18:02:04 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/03 19:22:46 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 		i = 0;
 		data.num = atoi(argv[1]);
 		data.philo = malloc(sizeof(pthread_t) * data.num);
+		pthread_mutex_init(data.lock, NULL);
 	}
 	if (argc > 4)
 	{
@@ -50,6 +51,7 @@ int main(int argc, char **argv)
 		{
 			data.i = i;
 			pthread_create(&data.philo[i], NULL, (void *)&eat, &data);
+			pthread_join(data.philo[i], NULL);
 			i++;
 		}
 	}
