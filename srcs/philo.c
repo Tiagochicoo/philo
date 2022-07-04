@@ -6,11 +6,19 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/03 21:35:49 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/04 21:36:25 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+// typedef struct philo
+// {
+// 	clock_t	start_eating;
+// 	clock_t	finish_eating;
+// 	int		left_fork;
+// 	int		right_fork;
+// } 				philo;
 
 typedef struct s_data
 {
@@ -23,11 +31,11 @@ typedef struct s_data
 
 void	*eat(t_data *data)
 {
-	//printf("Philosopher %d is waiting!\n", data->i);
-	//pthread_mutex_lock(data->mutex);
+	printf("Philosopher %d is waiting!\n", data->i);
+	pthread_mutex_lock(data->mutex);
 	printf("Philosopher %d is eating spaghetti!\n", data->i);
-	printf("Philosopher %d put down forks!\n", data->i);
-	//pthread_mutex_unlock(data->mutex);
+	//printf("Philosopher %d put down forks!\n", data->i);
+	pthread_mutex_unlock(data->mutex);
 	return (NULL);
 }
 
@@ -41,21 +49,21 @@ int main(int argc, char **argv)
 		i = 0;
 		data.num = atoi(argv[1]);
 		data.forks = data.num;
-		data.philos = malloc(sizeof(pthread_t) * data.num - 1);
+		data.philos = malloc(sizeof(pthread_t) * data.num);
 		pthread_mutex_init(data.mutex, NULL);
 		while (i < data.num)
 		{
 			data.i = i;
 			pthread_create(&data.philos[i], NULL, (void *)&eat, &data);
-			pthread_detach(data.philos[i]);
 			i++;
 		}
-		// while (i < data.num)
-		// {
-		// 	pthread_join(data.philos[i], NULL);
-		// 	i++;
-		// }
-		pthread_exit(0);
+		i = 0;
+		while (i < data.num)
+		{
+			pthread_join(data.philos[i], NULL);
+			i++;
+		}
+		//pthread_exit(0);
 		pthread_mutex_destroy(data.mutex);
 		free(data.philos);
 	}
