@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/04 22:20:28 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/05 10:46:31 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,19 @@
 // 	int		right_fork;
 // } 				philo;
 
+typedef struct s_data
+{
+	int					i;
+	int					num;
+	int					forks;
+	pthread_t			*philos;
+	pthread_mutex_t		*mutex;
+}			t_data;
+
 void	*eat(t_data *data)
 {
-	printf("data->i = %d\n", data->i);
-	//printf("Philosopher %d is waiting!\n", data->i);
+	//printf("data->i = %d\n", data->i);
+	printf("Philosopher %d is waiting!\n", data->i);
 	pthread_mutex_lock(data->mutex);
 	printf("Philosopher %d is eating spaghetti!\n", data->i);
 	//printf("Philosopher %d put down forks!\n", data->i);
@@ -33,23 +42,22 @@ void	*eat(t_data *data)
 
 int main(int argc, char **argv)
 {
-	int		 	i;
-	t_data		data;
+	int		 			i;
+	t_data				data;
+	pthread_mutex_t		mutex;
 
 	if (argc > 4)
 	{
 		i = 0;
 		data.num = atoi(argv[1]);
+		data.i = i;
 		data.forks = data.num;
 		data.philos = malloc(sizeof(pthread_t) * data.num);
-		pthread_mutex_init(data.mutex, NULL);
+		data.mutex = &mutex;
+		pthread_mutex_init(&mutex, NULL);
 		while (i < data.num)
 		{
-			printf("1 - i = %d\n", i);
-			data.i = i;
-			printf("2 - data.i = %d\n", data.i);
 			pthread_create(&data.philos[i], NULL, (void *)&eat, &data);
-			printf("3 - i = %d\n", i);
 			i++;
 		}
 		i = 0;
