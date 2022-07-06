@@ -6,36 +6,39 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/05 22:15:47 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/06 21:32:30 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-// typedef struct philo
-// {
-// 	clock_t	start_eating;
-// 	clock_t	finish_eating;
-// 	int		left_fork;
-// 	int		right_fork;
-// } 				philo;
+typedef struct philo
+{
+	struct timeval	start;
+	int				left_fork;
+	int				right_fork;
+} 				philo;
 
 typedef struct s_data
 {
 	int					i;
 	int					num;
 	int					forks;
+	double				time_to_eat;
 	pthread_t			*philos;
 	pthread_mutex_t		*mutex;
 }			t_data;
 
 void	*eat(t_data *data)
 {
-	//printf("eat(): data->i = %d\n", data->i);
+	struct timeval	start;
+	struct timeval	end;
+
+	gettimeofday(&start, NULL);
 	pthread_mutex_lock(data->mutex);
-	printf("Philosopher %d is eating spaghetti!\n", data->i);
-	usleep(1000000);
-	//printf("Philosopher %d put down forks!\n", data->i);
+	usleep(50000);
+	gettimeofday(&end, NULL);
+	printf("%.0f %d is eating\n", (double)(end.tv_sec * 1000 + end.tv_usec / 1000) - (double)(start.tv_sec * 1000 + start.tv_usec / 1000), data->i);
 	pthread_mutex_unlock(data->mutex);
 	return (NULL);
 }
@@ -56,7 +59,6 @@ int main(int argc, char **argv)
 		while (i < data.num)
 		{
 			data.i = i;
-			printf("pthread_create -> %d\n", data.i);
 			pthread_create(&data.philos[i], NULL, (void *)&eat, &data);
 			i++;
 		}
@@ -65,7 +67,8 @@ int main(int argc, char **argv)
 		{
 			data.i = i;
 			pthread_join(data.philos[i], NULL);
-			printf("joined thread -> %d\n", data.i);
+			//gettimeofday(&data.end, NULL);
+			//printf("%.0f %d finished eating\n", (double)(data.end.tv_sec * 1000 + data.end.tv_usec / 1000) - (double)(data.start.tv_sec * 1000 + data.start.tv_usec / 1000), i);
 			i++;
 		}
 		//pthread_exit(0);
@@ -74,6 +77,5 @@ int main(int argc, char **argv)
 	}
 	else
 		printf("Usage: \"./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\"\n");
-	
 	return (0);
 }
