@@ -6,18 +6,18 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/06 21:32:30 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/06 21:45:38 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-typedef struct philo
+typedef struct s_philo
 {
 	struct timeval	start;
 	int				left_fork;
 	int				right_fork;
-} 				philo;
+} 				t_philo;
 
 typedef struct s_data
 {
