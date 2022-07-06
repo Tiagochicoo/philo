@@ -6,11 +6,11 @@
 #    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/07/03 21:23:13 by tpereira         ###   ########.fr        #
+#    Updated: 2022/07/06 07:47:04 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PHILO	=	philo
+NAME	=	philo
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 SRCS	=	./srcs/*.c
@@ -18,7 +18,7 @@ INC		=	./includes/*.h
 MAKEFLAGS += --silent
 
 all:
-	$(CC) $(CFLAGS) $(INC) $(SRCS) -o $(PHILO)
+	$(CC) $(CFLAGS) $(INC) $(SRCS) -o $(NAME)
 	printf "\e[38;5;46m ╔════════════════════════════════════╗\e[0m\n"
 	printf "\e[38;5;46m█▓▒░	      Philo Project         ░▒▓█ \e[0m\n"
 	printf "\e[38;5;46m█▓▒░		Compiled	    ░▒▓█ \e[0m\n"
