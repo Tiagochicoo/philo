@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/07 22:30:14 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/07 22:34:37 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	  get_forks(t_info *info)
 	n = 0;
 	printf("\n\nget forks()\n");
 	printf("info->i: %d\n", info->i);
-	printf("info->num: %d\n", info->num);
+	// printf("info->num: %d\n", info->num);
 	if (info->i != info->num && info->num > 2)
 		n = info->i + 1;
 	else if (!info->forks[info->i] && !info->forks[n])
@@ -94,8 +94,8 @@ void	*eat(t_info *info)
 
 void	*routine(t_info *info)
 {
-	// printf("\n\nroutine()\n");
-	// printf("info->i: %d\n", info->i);
+	printf("\n\nroutine()\n");
+	printf("info->i: %d\n", info->i);
 	// printf("info->num: %d\n", info->num);
 	if (get_forks(info))
 		eat(info);
