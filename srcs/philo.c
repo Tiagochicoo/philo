@@ -6,31 +6,11 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/07 22:34:37 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/07/20 10:11:23 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-typedef struct s_philo
-{
-	struct timeval	start;
-	int				left_fork;
-	int				right_fork;
-} 				t_philo;
-
-typedef struct s_info
-{
-	int					i;
-	int					num;
-	int					*forks;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					must_eat;
-	pthread_t			*philos;
-	pthread_mutex_t		*mutex;
-}			t_info;
 
 void	go_to_sleep(t_info *info)
 {
@@ -104,6 +84,45 @@ void	*routine(t_info *info)
 	return (NULL);
 }
 
+void	create_philo(t_info *info)
+{
+	t_philo *philosopher;
+
+	printf("\n\ncreate_philo()\n");
+	printf("info->i = %d\n", info->i);
+	philosopher = malloc(sizeof(t_philo));
+	philosopher->thread = malloc(sizeof(pthread_t));
+	philosopher->id = info->i;
+	philosopher->left_fork = info->i;
+	philosopher->right_fork = info->i + 1;
+	philosopher->meals = 0;
+	philosopher->eat_timestamp = 0;
+	info->threads[info->i] = philosopher->thread;
+	if (!pthread_create(&philosopher->thread, NULL, (void *)&routine, &info))
+		printf("Error creating thread!!\n");
+}
+
+void	create_threads(t_info *info)
+{
+	int i;
+	
+	i = 0;
+	while (i < info->num)
+	{
+		info->i = i;
+		printf("\n\ncreate_threads()\n");
+		printf("info->i = %d\n", info->i);
+		create_philo(info);
+		i++;
+	}
+	i = 0;
+	while (i < info->num)
+	{
+		pthread_join(info->threads[i], NULL);
+		i++;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	int		 			i;
@@ -120,19 +139,9 @@ int main(int argc, char **argv)
 		info.forks = malloc(sizeof(int) * info.num);
 		info.philos = malloc(sizeof(pthread_t) * info.num);
 		pthread_mutex_init(info.mutex, NULL);
-		while (i < info.num)
-		{
-			info.i = i;
-			pthread_create(&info.philos[i], NULL, (void *)&routine, &info);
-			i++;
-		}
-		i = 0;
-		while (i < info.num)
-		{
-			info.i = i;
-			pthread_join(info.philos[i], NULL);
-			i++;
-		}
+
+		create_threads(&info);
+
 		pthread_mutex_destroy(info.mutex);
 		free(info.philos);
 	}
