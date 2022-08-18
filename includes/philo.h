@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/07/20 10:09:34 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:02:52 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
-# include <semaphore.h>
 
 typedef struct s_philo
 {
@@ -41,7 +40,9 @@ typedef struct s_info
 	int					must_eat;
 	pthread_t			*threads;
     t_philo             *philos;
-	pthread_mutex_t		*mutex;
+	pthread_mutex_t		**mutex;
 }				t_info;
+
+char *itoa(int n, char s[]);
 
 #endif

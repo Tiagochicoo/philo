@@ -25,7 +25,7 @@ all:
 	printf "\e[38;5;46m ╚════════════════════════════════════╝\e[0m\n"
 
 cc:	all
-	time ./philo 3 1 2 3
+	philo 3 1 2 3
 
 clean :
 	rm -rf ./srcs/*.o
@@ -34,7 +34,7 @@ clean :
 	printf "\e[31;5;200m ╚════════════════════════════════════╝\e[0m\n"
 
 fclean : clean
-	@rm -rf $(PHILO)
+	@rm -rf $(NAME)
 
 re :	fclean all
 bonus:	all
