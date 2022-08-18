@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/18 19:02:52 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:25:28 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ typedef struct s_philo
 
 typedef struct s_info
 {
-	int					i;
-	int					num;
 	int					*forks;
 	int					time_to_die;
 	int					time_to_eat;

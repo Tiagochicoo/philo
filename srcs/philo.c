@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/18 19:14:45 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:25:14 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,22 +147,18 @@ int	check_args(char **argv)
 		if (num < 1)
 		{
 			printf("Error! Invalid argument\n");
-			return (1);
+			return (0);
 		}
 		else
 			i++;
 	}
-	return (0);
+	return (1);
 }
 
 void	set_params(t_info *info, char **argv)
 {
-	if (check_args(argv) != 0)
+	if (check_args(argv))
 	{
-		info->i = 0;
-		printf("info->i -> %d\n", info->i);
-		info->num = atoi(argv[1]);
-		printf("info->num -> %d\n", info->num);
 		info->time_to_die = atoi(argv[2]);
 		printf("info->time_to_die -> %d\n", info->time_to_die);
 		info->time_to_eat = atoi(argv[3]);
