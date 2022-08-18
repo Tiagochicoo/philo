@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/18 19:11:48 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/18 19:14:45 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,11 +138,13 @@
 int	check_args(char **argv)
 {
 	int	i;
+	int	num;
 
-	i = 0;
+	i = 1;
 	while (argv[i])
 	{
-		if (atoi(argv[i]) < 1)
+		num = atoi(argv[i]);
+		if (num < 1)
 		{
 			printf("Error! Invalid argument\n");
 			return (1);
