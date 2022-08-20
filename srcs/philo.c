@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 13:44:47 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 19:39:27 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ void	error(char *msg)
 // 	return (NULL);
 // }
 
-void	*routine(t_philo philo)
+void	*routine(t_info info)
 {
-	printf("routine\nPhilo[%d]\n", philo.id);
-	// // printf("info->num: %d\n", info->num);
+	static int n = 0;
+
+	pthread_mutex_lock(&info.philos->left_fork);
+	printf("routine\nPhilo[%d]\n", info.philos[n].id);
+	n++;
+	pthread_mutex_unlock(&info.philos->left_fork);
 	// if (get_forks(info))
 	// 	eat(info);
 	// else if (info->i > 1)
@@ -91,18 +95,13 @@ void	*routine(t_philo philo)
 
 void	create_philo(t_info *info, int	i)
 {
-	t_philo *philo;
-
-	//printf("Creating philo %d\n", i + 1);
-	philo = malloc(sizeof(t_philo));
-	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
-	philo->id = i;
-	philo->left_fork = info->forks[i];
-	philo->right_fork = info->forks[i + 1];
-	philo->meals = 0;
+	info->philos[i].thread = (pthread_t)malloc(sizeof(pthread_t));
+	info->philos[i].id = i + 1;
+	info->philos[i].left_fork = info->forks[i];
+	info->philos[i].right_fork = info->forks[i + 1];
+	info->philos[i].meals = 0;
 	gettimeofday(&info->philos[i].eat_timestamp, NULL);
-	info->philos[i].thread = philo->thread;
-	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, philo))
+	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, info))
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
@@ -168,6 +167,7 @@ void	set_params(t_info *info, char **argv)
 			info->must_eat = atoi(argv[5]);
 		else
 			info->must_eat = -1;
+		info->philos = (t_philo*)malloc(sizeof(t_philo));
 		gettimeofday(&info->start_time, NULL);
 	}
 	else
