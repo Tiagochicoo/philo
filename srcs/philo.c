@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/18 19:25:14 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 11:19:52 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	check_args(char **argv)
 		num = atoi(argv[i]);
 		if (num < 1)
 		{
-			printf("Error! Invalid argument\n");
+			printf("Error! Invalid arguments\n");
 			return (0);
 		}
 		else
@@ -165,9 +165,9 @@ void	set_params(t_info *info, char **argv)
 		printf("info->time_to_eat -> %d\n", info->time_to_eat);
 		info->time_to_sleep = atoi(argv[4]);
 		printf("info->time_to_sleep -> %d\n", info->time_to_sleep);
-		info->forks = malloc(sizeof(int) * info->num);
-		info->philos = malloc(sizeof(pthread_t) * info->num);
-		info->mutex = malloc(sizeof(pthread_mutex_t) * info->num);
+		// info->forks = malloc(sizeof(int) * info->num);
+		// info->philos = malloc(sizeof(pthread_t) * info->num);
+		// info->mutex = malloc(sizeof(pthread_mutex_t) * info->num);
 	}
 	else
 		exit(EXIT_FAILURE);
