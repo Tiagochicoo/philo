@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 11:50:39 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:18:55 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_info
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					must_eat;
-	int					start_time;
+	struct timeval		start_time;
     t_philo             *philos;
 	pthread_mutex_t		*forks;
 }				t_info;

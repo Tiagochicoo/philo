@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 11:55:10 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:28:30 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,10 @@ void	create_forks(t_info *info)
 	int	i;
 
 	i = 0;
-	while(i < info->num)
+	info->forks = malloc(sizeof(pthread_mutex_t) * info->num);
+	while (i < info->num)
 	{
-		if (pthread_mutex_init(&info->forks[i], NULL) != -1)
+		if (!pthread_mutex_init(&info->forks[i], NULL))
 			i++;
 		else
 			error("Error!! Failed to create fork!\n");
@@ -149,10 +150,7 @@ int	check_args(char **argv)
 	{
 		num = atoi(argv[i]);
 		if (num < 1)
-		{
-			printf("Error! Invalid arguments\n");
 			return (0);
-		}
 		else
 			i++;
 	}
@@ -167,9 +165,14 @@ void	set_params(t_info *info, char **argv)
 		info->time_to_die = atoi(argv[2]);
 		info->time_to_eat = atoi(argv[3]);
 		info->time_to_sleep = atoi(argv[4]);
+		if (argv[5])
+			info->must_eat = atoi(argv[5]);
+		else
+			info->must_eat = -1;
+		gettimeofday(&info->start_time, NULL);
 	}
 	else
-		exit(EXIT_FAILURE);
+		error("Error! Invalid arguments\n");
 }
 
 int main(int argc, char **argv)
@@ -180,7 +183,7 @@ int main(int argc, char **argv)
 	{
 		set_params(&info, argv);
 		create_forks(&info);
-		create_philos(&info);
+		//create_philos(&info);
 		//routine();
 	}
 	else
