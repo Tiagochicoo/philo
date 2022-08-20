@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 13:28:30 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 13:44:47 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	error(char *msg)
 // 	return (NULL);
 // }
 
-void	*routine(void)
+void	*routine(t_philo philo)
 {
-	printf("\n\nroutine()\n");
+	printf("routine\nPhilo[%d]\n", philo.id);
 	// // printf("info->num: %d\n", info->num);
 	// if (get_forks(info))
 	// 	eat(info);
@@ -89,31 +89,30 @@ void	*routine(void)
 	return (NULL);
 }
 
-void	create_philo(t_info *info, int	num)
+void	create_philo(t_info *info, int	i)
 {
 	t_philo *philo;
 
-	printf("\n\ncreate_philo()\n");
+	//printf("Creating philo %d\n", i + 1);
 	philo = malloc(sizeof(t_philo));
 	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
-	philo->id = num;
-	philo->left_fork = info->forks[num];
-	philo->right_fork = info->forks[num + 1];
+	philo->id = i;
+	philo->left_fork = info->forks[i];
+	philo->right_fork = info->forks[i + 1];
 	philo->meals = 0;
-	philo->eat_timestamp = 0;
-	info->philos[num].thread = philo->thread;
-	if (!pthread_create(&philo->thread, NULL, (void *)&routine, NULL))
-		printf("Error creating thread!!\n");
+	gettimeofday(&info->philos[i].eat_timestamp, NULL);
+	info->philos[i].thread = philo->thread;
+	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, philo))
+		printf("Error creating philo %d!!\n", i + 1);
 }
 
 void	create_philos(t_info *info)
 {
 	int i;
 	
-	i = 1;
-	while (i <= info->num)
+	i = 0;
+	while (i < info->num)
 	{
-		printf("\n\ncreate_threads()\n");
 		create_philo(info, i);
 		i++;
 	}
@@ -183,7 +182,7 @@ int main(int argc, char **argv)
 	{
 		set_params(&info, argv);
 		create_forks(&info);
-		//create_philos(&info);
+		create_philos(&info);
 		//routine();
 	}
 	else
