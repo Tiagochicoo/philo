@@ -6,11 +6,17 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 11:19:52 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/20 11:55:10 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	error(char *msg)
+{
+	printf("%s\n", msg);
+	exit(1);
+}
 
 // void	go_to_sleep(t_info *info)
 // {
@@ -60,80 +66,78 @@
 // 	double			milliseconds;
 
 // 	gettimeofday(&start, NULL);
-// 	pthread_mutex_lock(info->mutex);
+// 	pthread_forks_lock(info->forks);
 // 	gettimeofday(&end, NULL);
 // 	milliseconds = (double)(end.tv_sec * 1000 + end.tv_usec / 1000) - (double)(start.tv_sec * 1000 + start.tv_usec / 1000);
 // 	printf("%.0f %d is eating\n", milliseconds, info->i);
 // 	info->i++;
 // 	usleep(info->time_to_eat);
 // 	release_forks(info);
-// 	pthread_mutex_unlock(info->mutex);
+// 	pthread_forks_unlock(info->forks);
 // 	go_to_sleep(info);
 // 	return (NULL);
 // }
 
-// void	*routine(t_info *info)
-// {
-// 	printf("\n\nroutine()\n");
-// 	printf("info->i: %d\n", info->i);
-// 	// printf("info->num: %d\n", info->num);
-// 	if (get_forks(info))
-// 		eat(info);
-// 	else if (info->i > 1)
-// 		routine(info);
-// 	return (NULL);
-// }
+void	*routine(void)
+{
+	printf("\n\nroutine()\n");
+	// // printf("info->num: %d\n", info->num);
+	// if (get_forks(info))
+	// 	eat(info);
+	// else if (info->i > 1)
+	// 	routine(info);
+	return (NULL);
+}
 
-// void	create_philo(t_info *info)
-// {
-// 	t_philo *philosopher;
+void	create_philo(t_info *info, int	num)
+{
+	t_philo *philo;
 
-// 	printf("\n\ncreate_philo()\n");
-// 	printf("info->i = %d\n", info->i);
-// 	philosopher = malloc(sizeof(t_philo));
-// 	philosopher->thread = (pthread_t)malloc(sizeof(pthread_t));
-// 	philosopher->id = info->i;
-// 	philosopher->left_fork = info->i;
-// 	philosopher->right_fork = info->i + 1;
-// 	philosopher->meals = 0;
-// 	philosopher->eat_timestamp = 0;
-// 	info->threads[info->i] = philosopher->thread;
-// 	if (!pthread_create(&philosopher->thread, NULL, (void *)&routine, &info))
-// 		printf("Error creating thread!!\n");
-// }
+	printf("\n\ncreate_philo()\n");
+	philo = malloc(sizeof(t_philo));
+	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
+	philo->id = num;
+	philo->left_fork = info->forks[num];
+	philo->right_fork = info->forks[num + 1];
+	philo->meals = 0;
+	philo->eat_timestamp = 0;
+	info->philos[num].thread = philo->thread;
+	if (!pthread_create(&philo->thread, NULL, (void *)&routine, NULL))
+		printf("Error creating thread!!\n");
+}
 
-// void	create_threads(t_info *info)
-// {
-// 	int i;
+void	create_philos(t_info *info)
+{
+	int i;
 	
-// 	i = 0;
-// 	while (i < info->num)
-// 	{
-// 		info->i = i;
-// 		printf("\n\ncreate_threads()\n");
-// 		printf("info->i = %d\n", info->i);
-// 		create_philo(info);
-// 		i++;
-// 	}
-// 	i = 0;
-// 	while (i < info->num)
-// 	{
-// 		pthread_join(info->threads[i], NULL);
-// 		i++;
-// 	}
-// }
+	i = 1;
+	while (i <= info->num)
+	{
+		printf("\n\ncreate_threads()\n");
+		create_philo(info, i);
+		i++;
+	}
+	i = 1;
+	while (i <= info->num)
+	{
+		pthread_join(info->philos[i].thread, NULL);
+		i++;
+	}
+}
 
-// void	create_mutexex(t_info *info)
-// {
-// 	int	i;
+void	create_forks(t_info *info)
+{
+	int	i;
 
-// 	i = 0;
-// 	while(i < info->num)
-// 	{
-// 		pthread_mutex_init(info->mutex[i], NULL);
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while(i < info->num)
+	{
+		if (pthread_mutex_init(&info->forks[i], NULL) != -1)
+			i++;
+		else
+			error("Error!! Failed to create fork!\n");
+	}
+}
 
 int	check_args(char **argv)
 {
@@ -159,15 +163,10 @@ void	set_params(t_info *info, char **argv)
 {
 	if (check_args(argv))
 	{
+		info->num = atoi(argv[1]);
 		info->time_to_die = atoi(argv[2]);
-		printf("info->time_to_die -> %d\n", info->time_to_die);
 		info->time_to_eat = atoi(argv[3]);
-		printf("info->time_to_eat -> %d\n", info->time_to_eat);
 		info->time_to_sleep = atoi(argv[4]);
-		printf("info->time_to_sleep -> %d\n", info->time_to_sleep);
-		// info->forks = malloc(sizeof(int) * info->num);
-		// info->philos = malloc(sizeof(pthread_t) * info->num);
-		// info->mutex = malloc(sizeof(pthread_mutex_t) * info->num);
 	}
 	else
 		exit(EXIT_FAILURE);
@@ -180,8 +179,9 @@ int main(int argc, char **argv)
 	if (argc > 4)
 	{
 		set_params(&info, argv);
-		//create_mutexex(&info);
-		//create_threads(&info);
+		create_forks(&info);
+		create_philos(&info);
+		//routine();
 	}
 	else
 		printf("Usage: \"./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\"\n");

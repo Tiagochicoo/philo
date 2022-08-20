@@ -6,7 +6,7 @@
 #    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/08/19 19:23:01 by tpereira         ###   ########.fr        #
+#    Updated: 2022/08/20 11:30:39 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ INC		=	./includes/*.h
 MAKEFLAGS += --silent
 
 all:
-	$(CC) $(CFLAGS) $(INC) $(SRCS) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 	printf "\e[38;5;46m ╔════════════════════════════════════╗\e[0m\n"
 	printf "\e[38;5;46m█▓▒░	      Philo Project         ░▒▓█ \e[0m\n"
 	printf "\e[38;5;46m█▓▒░		Compiled	    ░▒▓█ \e[0m\n"
