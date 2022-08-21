@@ -6,11 +6,13 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 11:48:03 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 12:19:38 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void *routine(t_philo *philo);
 
 void	error(char *msg)
 {
@@ -35,59 +37,63 @@ void	error(char *msg)
 // 	info->forks[n] = 0;
 // }
 
-// void	*eat(t_info *info)
-// {
-// 	struct timeval	start;
-// 	struct timeval	end;
-// 	double			milliseconds;
-
-// 	gettimeofday(&start, NULL);
-// 	pthread_forks_lock(info->forks);
-// 	gettimeofday(&end, NULL);
-// 	milliseconds = (double)(end.tv_sec * 1000 + end.tv_usec / 1000) - (double)(start.tv_sec * 1000 + start.tv_usec / 1000);
-// 	printf("%.0f %d is eating\n", milliseconds, info->i);
-// 	info->i++;
-// 	usleep(info->time_to_eat);
-// 	release_forks(info);
-// 	pthread_forks_unlock(info->forks);
-// 	go_to_sleep(info);
-// 	return (NULL);
-// }
-
-void	get_forks(t_philo *philo)
+void	print_msg(char *msg, t_philo *philo)
 {
-	static int n = 0;
+	pthread_mutex_lock(&philo->info->print_lock);
+	printf("Philo[%d] -> %s\n", philo->id, msg);
+	pthread_mutex_unlock(&philo->info->print_lock);
+}
 
-	if (n % 2 == 0)
+void	*eat(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
 	{
-		pthread_mutex_lock(&philo->left_fork);
-		pthread_mutex_lock(&philo->right_fork);
-		printf("par -> Philo[%d] -> picked forks \n", n + 1);
-		usleep(100000);
-		pthread_mutex_unlock(&philo->left_fork);
-		pthread_mutex_unlock(&philo->right_fork);
-		n++;
+		print_msg("is eating", philo);
+		usleep(1000000);
+		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
+		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
+		print_msg("stopped eating", philo);
+		usleep(100);
 	}
 	else
 	{
-		pthread_mutex_lock(&philo->left_fork);
-		pthread_mutex_lock(&philo->right_fork);
-		printf("impar -> Philo[%d] -> picked forks \n", n + 1);
-		usleep(100000);
-		pthread_mutex_unlock(&philo->left_fork);
-		pthread_mutex_unlock(&philo->right_fork);
-		n++;
+		print_msg("is eating", philo);
+		usleep(1000000);
+		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
+		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
+		print_msg("stopped eating", philo);
+		usleep(100);
 	}
+	return (NULL);
+}
+
+void	get_forks(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
+		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
+		printf("Philo[%d] -> picked forks \n", philo->id);
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
+		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
+		printf("Philo[%d] -> picked forks \n", philo->id);
+	}
+}
+
+void	start_routine(t_philo *philo)
+{
+	get_forks(philo);
+	eat(philo);
+	routine(philo);
 }
 
 void	*routine(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->print_lock);
-	printf("Created philo [%d]\n", philo->id);
-	pthread_mutex_unlock(&philo->info->print_lock);
-	//get_forks(philo);
-	//eat(info);
-	//think(info);
+	start_routine(philo);
+	// think(info);
 	return (NULL);
 }
 
@@ -128,7 +134,7 @@ void	create_philos(t_info *info)
 	{
 		pthread_mutex_lock(&info->print_lock);
 		pthread_join(info->philos[i].thread, NULL);
-		printf("Joined philo %d!!\n", ++i);
+		printf("Joined thread %d!!\n", ++i);
 		pthread_mutex_unlock(&info->print_lock);
 	}
 }
