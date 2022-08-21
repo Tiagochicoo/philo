@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 19:39:27 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 11:48:03 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,6 @@ void	error(char *msg)
 // 	info->forks[n] = 0;
 // }
 
-// int	  get_forks(t_info *info)
-// {
-// 	int n;
-
-// 	n = 0;
-// 	printf("\n\nget forks()\n");
-// 	printf("info->i: %d\n", info->i);
-// 	// printf("info->num: %d\n", info->num);
-// 	if (info->i != info->num && info->num > 2)
-// 		n = info->i + 1;
-// 	else if (!info->forks[info->i] && !info->forks[n])
-// 	{
-// 		info->forks[info->i] = 1;
-// 		info->forks[n] = 1;
-// 		printf("philo %d grabbed left fork\n", info->i);
-// 		printf("philo %d grabbed right fork\n", info->i);
-// 		return (1);
-// 	}
-// 	else
-// 		printf("%d couldn't get forks...\n", info->i);
-// 	// 	get_forks(info);
-// 	return (0);
-// }
-
 // void	*eat(t_info *info)
 // {
 // 	struct timeval	start;
@@ -78,30 +54,62 @@ void	error(char *msg)
 // 	return (NULL);
 // }
 
-void	*routine(t_info info)
+void	get_forks(t_philo *philo)
 {
 	static int n = 0;
 
-	pthread_mutex_lock(&info.philos->left_fork);
-	printf("routine\nPhilo[%d]\n", info.philos[n].id);
-	n++;
-	pthread_mutex_unlock(&info.philos->left_fork);
-	// if (get_forks(info))
-	// 	eat(info);
-	// else if (info->i > 1)
-	// 	routine(info);
+	if (n % 2 == 0)
+	{
+		pthread_mutex_lock(&philo->left_fork);
+		pthread_mutex_lock(&philo->right_fork);
+		printf("par -> Philo[%d] -> picked forks \n", n + 1);
+		usleep(100000);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+		n++;
+	}
+	else
+	{
+		pthread_mutex_lock(&philo->left_fork);
+		pthread_mutex_lock(&philo->right_fork);
+		printf("impar -> Philo[%d] -> picked forks \n", n + 1);
+		usleep(100000);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+		n++;
+	}
+}
+
+void	*routine(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->info->print_lock);
+	printf("Created philo [%d]\n", philo->id);
+	pthread_mutex_unlock(&philo->info->print_lock);
+	//get_forks(philo);
+	//eat(info);
+	//think(info);
 	return (NULL);
 }
 
 void	create_philo(t_info *info, int	i)
 {
-	info->philos[i].thread = (pthread_t)malloc(sizeof(pthread_t));
-	info->philos[i].id = i + 1;
-	info->philos[i].left_fork = info->forks[i];
-	info->philos[i].right_fork = info->forks[i + 1];
-	info->philos[i].meals = 0;
-	gettimeofday(&info->philos[i].eat_timestamp, NULL);
-	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, info))
+	t_philo *philo;
+
+	philo = malloc(sizeof(t_philo));
+	if (!philo)
+		return (error("Failed to malloc philo!\n"));
+	philo->thread = malloc(sizeof(pthread_t));
+	if (!philo->thread)
+		return (error("Failed to malloc thread!\n"));
+	philo->info = info;
+	philo->id = i + 1;
+	philo->eat_timestamp = (struct timeval){0};
+	philo->left_fork = philo->info->forks[i];
+	philo->right_fork = philo->info->forks[i + 1 ];
+	philo->meals = 0;
+	philo->info->philos[i].thread = philo->thread;
+	gettimeofday(&philo->eat_timestamp, NULL);
+	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
@@ -115,11 +123,13 @@ void	create_philos(t_info *info)
 		create_philo(info, i);
 		i++;
 	}
-	i = 1;
-	while (i <= info->num)
+	i = 0;
+	while (i < info->num)
 	{
+		pthread_mutex_lock(&info->print_lock);
 		pthread_join(info->philos[i].thread, NULL);
-		i++;
+		printf("Joined philo %d!!\n", ++i);
+		pthread_mutex_unlock(&info->print_lock);
 	}
 }
 
@@ -129,6 +139,8 @@ void	create_forks(t_info *info)
 
 	i = 0;
 	info->forks = malloc(sizeof(pthread_mutex_t) * info->num);
+	if (!info->forks)
+		return (error("Failed to malloc forks!\n"));
 	while (i < info->num)
 	{
 		if (!pthread_mutex_init(&info->forks[i], NULL))
@@ -167,7 +179,7 @@ void	set_params(t_info *info, char **argv)
 			info->must_eat = atoi(argv[5]);
 		else
 			info->must_eat = -1;
-		info->philos = (t_philo*)malloc(sizeof(t_philo));
+		info->philos = malloc(sizeof(t_philo) * info->num);
 		gettimeofday(&info->start_time, NULL);
 	}
 	else

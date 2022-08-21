@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/20 13:34:39 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 11:47:04 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_philo
 	int				id;
 	int 			meals;
 	struct timeval	eat_timestamp;
+	struct s_info	*info;
 }				t_philo;
 
 typedef struct s_info
@@ -37,8 +38,9 @@ typedef struct s_info
 	int					time_to_sleep;
 	int					must_eat;
 	struct timeval		start_time;
-    t_philo             *philos;
+	struct s_philo		*philos;
 	pthread_mutex_t		*forks;
+	pthread_mutex_t		print_lock;
 }				t_info;
 
 #endif
