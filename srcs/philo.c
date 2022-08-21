@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 19:17:33 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 19:43:26 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	create_philo(t_info *info, int	i)
 		return (error("Failed to malloc thread!\n"));
 	philo->info = info;
 	philo->id = i + 1;
-	philo->eat_timestamp = (struct timeval){0};
+	gettimeofday(&philo->eat_timestamp, NULL);
 	philo->left_fork = philo->info->forks[i];
 	philo->right_fork = philo->info->forks[i + 1 ];
 	philo->meals = 0;

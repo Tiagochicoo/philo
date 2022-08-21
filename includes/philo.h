@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 12:21:41 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 19:42:42 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ typedef struct s_info
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					must_eat;
+	int					philo_died;
 	struct timeval		start_time;
 	struct s_philo		*philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_lock;
+	pthread_mutex_t		death_lock;
 }				t_info;
 
 void *routine(t_philo *philo);
