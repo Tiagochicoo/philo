@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 19:43:26 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 20:10:36 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,25 @@ void	error(char *msg)
 	exit(1);
 }
 
+int	elapsed_time(t_philo *philo)
+{
+	struct timeval	timestamp;
+	int				now;
+	int				start;
+
+	gettimeofday(&timestamp, NULL);
+	now = (timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000);
+	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
+	return (now - start);
+}
+
 void	print_msg(char *msg, t_philo *philo)
 {
-	printf("[%d] -> %s\n", philo->id, msg);
+	int	timestamp;
+
+	timestamp = elapsed_time(philo);
+	// insert death_lock mutex here??
+	printf("%d [%d] -> %s\n", timestamp, philo->id, msg);
 }
 
 void	nap(t_philo *philo)
@@ -43,7 +59,7 @@ void	eat(t_philo *philo)
 		print_msg("is eating", philo);
 		pthread_mutex_unlock(&philo->info->print_lock);
 		philo->meals++;
-		usleep(philo->info->time_to_eat * 1000);
+		usleep(philo->info->time_to_eat);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 	}
@@ -53,7 +69,7 @@ void	eat(t_philo *philo)
 		print_msg("is eating", philo);
 		pthread_mutex_unlock(&philo->info->print_lock);
 		philo->meals++;
-		usleep(philo->info->time_to_eat * 1000);
+		usleep(philo->info->time_to_eat);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
@@ -81,7 +97,7 @@ void	get_forks(t_philo *philo)
 
 void	start_routine(t_philo *philo)
 {
-	if (philo->meals < philo->info->must_eat)
+	if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
 		get_forks(philo);
 		eat(philo);
