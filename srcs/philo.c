@@ -6,13 +6,12 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 12:19:38 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/21 19:17:33 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void *routine(t_philo *philo);
 
 void	error(char *msg)
 {
@@ -20,51 +19,44 @@ void	error(char *msg)
 	exit(1);
 }
 
-// void	go_to_sleep(t_info *info)
-// {
-// 	printf("philo %d is sleeping\n", info->i);
-// 	usleep(info->time_to_sleep);
-// }
-
-// void	release_forks(t_info *info)
-// {
-// 	int n;
-
-// 	n = 0;
-// 	if (info->i != info->num)
-// 		n = info->i + 1;
-// 	info->forks[info->i] = 0;
-// 	info->forks[n] = 0;
-// }
-
 void	print_msg(char *msg, t_philo *philo)
 {
+	printf("[%d] -> %s\n", philo->id, msg);
+}
+
+void	nap(t_philo *philo)
+{
 	pthread_mutex_lock(&philo->info->print_lock);
-	printf("Philo[%d] -> %s\n", philo->id, msg);
+	print_msg("is sleeping", philo);
+	pthread_mutex_unlock(&philo->info->print_lock);
+	usleep(philo->info->time_to_sleep * 1000);
+	pthread_mutex_lock(&philo->info->print_lock);
+	print_msg("is thinking", philo);
 	pthread_mutex_unlock(&philo->info->print_lock);
 }
 
-void	*eat(t_philo *philo)
+void	eat(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
+		pthread_mutex_lock(&philo->info->print_lock);
 		print_msg("is eating", philo);
-		usleep(1000000);
-		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
+		pthread_mutex_unlock(&philo->info->print_lock);
+		philo->meals++;
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
-		print_msg("stopped eating", philo);
-		usleep(100);
+		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 	}
 	else
 	{
+		pthread_mutex_lock(&philo->info->print_lock);
 		print_msg("is eating", philo);
-		usleep(1000000);
-		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
+		pthread_mutex_unlock(&philo->info->print_lock);
+		philo->meals++;
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
-		print_msg("stopped eating", philo);
-		usleep(100);
+		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
-	return (NULL);
 }
 
 void	get_forks(t_philo *philo)
@@ -72,22 +64,30 @@ void	get_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
+		pthread_mutex_lock(&philo->info->print_lock);
+		print_msg("has taken a fork", philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
-		printf("Philo[%d] -> picked forks \n", philo->id);
+		print_msg("has taken a fork", philo);
+		pthread_mutex_unlock(&philo->info->print_lock);
 	}
 	else
 	{
 		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
+		print_msg("has taken a fork", philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
-		printf("Philo[%d] -> picked forks \n", philo->id);
+		print_msg("has taken a fork", philo);
 	}
 }
 
 void	start_routine(t_philo *philo)
 {
-	get_forks(philo);
-	eat(philo);
-	routine(philo);
+	if (philo->meals < philo->info->must_eat)
+	{
+		get_forks(philo);
+		eat(philo);
+		nap(philo);
+		routine(philo);
+	}
 }
 
 void	*routine(t_philo *philo)
