@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/22 16:49:59 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/22 18:09:35 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void	think(t_philo *philo)
 		print_msg("is thinking", philo);
 }
 
-void	nap(t_philo *philo)
+void	nap(t_philo *philo, int	sleep_time)
 {
 	pthread_mutex_lock(&philo->info->print_lock);
 	print_msg("is sleeping", philo);
-	usleep(philo->info->time_to_sleep * 1000);
+	usleep(sleep_time * 1000);
 }
 
 void	eat(t_philo *philo)
@@ -101,6 +101,7 @@ void	is_dead(t_philo *philo)
 {
 	if (elapsed_time(philo) >= philo->info->time_to_die)
 		philo->info->philo_died = 1;
+	usleep(100);
 	print_msg("has died", philo);
 	pthread_join(philo->thread, NULL);
 	// routine(philo);
@@ -129,14 +130,15 @@ void	get_forks(t_philo *philo)
 
 void	start_routine(t_philo *philo)
 {
+	// !! avoid if statement beacuse of data-races !!
 	while(philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
 		get_forks(philo);
 		eat(philo);
-		nap(philo);
+		nap(philo, philo->info->time_to_sleep);
 		think(philo);
 		pthread_mutex_unlock(&philo->info->print_lock);
-		if (philo->info->philo_died == 0)
+		if (!philo->info->philo_died)
 			routine(philo);
 	}
 }
@@ -171,6 +173,24 @@ void	create_philo(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
+void	check_death_meals(t_info *info)
+{
+	if (info->num == 1)
+	{
+		//nap((t_philo*)info->philos[0], info->time_to_die);
+		//die(info);
+		print_msg("died\n", &info->philos[0]);
+		//exit(1);
+	}
+	else
+		while (1)
+		{
+			if (info->philo_died)
+				break ;
+		}
+	printf("die\n");
+}
+
 void	create_philos(t_info *info)
 {
 	int i;
@@ -181,11 +201,12 @@ void	create_philos(t_info *info)
 		create_philo(info, i);
 		i++;
 	}
+	//check_death_meals(info);
 	i = 0;
 	while (i < info->num)
 	{
-		pthread_mutex_lock(&info->print_lock);
 		pthread_join(info->philos[i].thread, NULL);
+		pthread_mutex_lock(&info->print_lock);
 		printf("Joined thread %d!!\n", ++i);
 		pthread_mutex_unlock(&info->print_lock);
 	}
@@ -239,7 +260,6 @@ void	set_params(t_info *info, char **argv)
 			info->must_eat = -1;
 		info->philos = malloc(sizeof(t_philo) * info->num);
 		gettimeofday(&info->start_time, NULL);
-
 	}
 	else
 		error("Error! Invalid arguments\n");
