@@ -6,11 +6,12 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/21 19:42:42 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:53:31 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PHILO_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <string.h>
 # include <stdio.h>
@@ -25,8 +26,8 @@ typedef struct s_philo
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
 	int				id;
-	int 			meals;
-	struct timeval	eat_timestamp;
+	int				meals;
+	int				eat_timestamp;
 	struct s_info	*info;
 }				t_philo;
 
@@ -45,6 +46,6 @@ typedef struct s_info
 	pthread_mutex_t		death_lock;
 }				t_info;
 
-void *routine(t_philo *philo);
+void	*routine(t_philo *philo);
 
 #endif
