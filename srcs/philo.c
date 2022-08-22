@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/22 19:28:24 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/22 19:32:28 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int	get_timestamp(void)
 
 int	elapsed_time(t_philo *philo)
 {
-	struct timeval	timestamp;
 	int				now;
 	int				start;
 
-	gettimeofday(&timestamp, NULL);
-	now = (timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000);
+	now = get_timestamp();
 	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
+	// printf("start -> %d\n", start);
+	// printf("now -> %d\n", now);
 	return (now - start);
 }
 
@@ -62,23 +62,26 @@ void	think(t_philo *philo)
 		print_msg("is thinking", philo, YELLOW);
 }
 
-void	nap(t_philo *philo)
+void	nap(t_philo *philo, int	sleep_time)
 {
 	pthread_mutex_lock(&philo->info->print_lock);
 	print_msg("is sleeping", philo, GREEN);
-	usleep(philo->info->time_to_sleep * 1000);
+	usleep(sleep_time * 1000);
 }
 
 void	eat(t_philo *philo)
 {
 	int timestamp;
 	
+	//add drop_forks()
+
+
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->info->print_lock);
 		timestamp = print_msg("is eating", philo, PURPLE);
 		philo->meals++;
-		usleep(philo->info->time_to_eat);
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 	}
@@ -87,7 +90,7 @@ void	eat(t_philo *philo)
 		pthread_mutex_lock(&philo->info->print_lock);
 		timestamp = print_msg("is eating", philo, PURPLE);
 		philo->meals++;
-		usleep(philo->info->time_to_eat);
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
@@ -99,6 +102,7 @@ void	is_dead(t_philo *philo)
 	if (elapsed_time(philo) >= philo->info->time_to_die)
 		philo->info->philo_died = 1;
 	print_msg("has died", philo, RED);
+	usleep(100);
 	pthread_join(philo->thread, NULL);
 	// routine(philo);
 }
@@ -126,14 +130,15 @@ void	get_forks(t_philo *philo)
 
 void	start_routine(t_philo *philo)
 {
+	// !! avoid if statement beacuse of data-races !!
 	while(philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
 		get_forks(philo);
 		eat(philo);
-		nap(philo);
+		nap(philo, philo->info->time_to_sleep);
 		think(philo);
 		pthread_mutex_unlock(&philo->info->print_lock);
-		if (philo->info->philo_died == 0)
+		if (!philo->info->philo_died)
 			routine(philo);
 	}
 }
@@ -154,7 +159,7 @@ void	create_philo(t_info *info, int	i)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (error("Failed to malloc philo!\n"));
-	philo->thread = malloc(sizeof(pthread_t));
+	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
 	if (!philo->thread)
 		return (error("Failed to malloc thread!\n"));
 	philo->info = info;
@@ -168,6 +173,24 @@ void	create_philo(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
+void	check_death_meals(t_info *info)
+{
+	if (info->num == 1)
+	{
+		//nap((t_philo*)info->philos[0], info->time_to_die);
+		//die(info);
+		print_msg("died\n", &info->philos[0], RED);
+		//exit(1);
+	}
+	else
+		while (1)
+		{
+			if (info->philo_died)
+				break ;
+		}
+	printf("die\n");
+}
+
 void	create_philos(t_info *info)
 {
 	int i;
@@ -178,11 +201,12 @@ void	create_philos(t_info *info)
 		create_philo(info, i);
 		i++;
 	}
+	//check_death_meals(info);
 	i = 0;
 	while (i < info->num)
 	{
-		pthread_mutex_lock(&info->print_lock);
 		pthread_join(info->philos[i].thread, NULL);
+		pthread_mutex_lock(&info->print_lock);
 		printf("Joined thread %d!!\n", ++i);
 		pthread_mutex_unlock(&info->print_lock);
 	}
