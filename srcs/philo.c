@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/22 15:35:26 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/22 16:49:59 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int	get_timestamp(void)
 
 int	elapsed_time(t_philo *philo)
 {
-	struct timeval	timestamp;
 	int				now;
 	int				start;
 
-	gettimeofday(&timestamp, NULL);
-	now = (timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000);
+	now = get_timestamp();
 	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
+	// printf("start -> %d\n", start);
+	// printf("now -> %d\n", now);
 	return (now - start);
 }
 
@@ -73,12 +73,15 @@ void	eat(t_philo *philo)
 {
 	int timestamp;
 	
+	//add drop_forks()
+
+
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->info->print_lock);
 		timestamp = print_msg("is eating", philo);
 		philo->meals++;
-		usleep(philo->info->time_to_eat);
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 	}
@@ -87,7 +90,7 @@ void	eat(t_philo *philo)
 		pthread_mutex_lock(&philo->info->print_lock);
 		timestamp = print_msg("is eating", philo);
 		philo->meals++;
-		usleep(philo->info->time_to_eat);
+		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
@@ -154,7 +157,7 @@ void	create_philo(t_info *info, int	i)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (error("Failed to malloc philo!\n"));
-	philo->thread = malloc(sizeof(pthread_t));
+	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
 	if (!philo->thread)
 		return (error("Failed to malloc thread!\n"));
 	philo->info = info;
@@ -236,6 +239,7 @@ void	set_params(t_info *info, char **argv)
 			info->must_eat = -1;
 		info->philos = malloc(sizeof(t_philo) * info->num);
 		gettimeofday(&info->start_time, NULL);
+
 	}
 	else
 		error("Error! Invalid arguments\n");
