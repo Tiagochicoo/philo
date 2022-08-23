@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/22 22:20:43 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 16:05:34 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void	eat(t_philo *philo)
 
 void	is_dead(t_philo *philo)
 {
-	if (philo->info->philo_died)
-		check_death_meals(philo->info);
+	// if (philo->info->philo_died)
+	// 	check_death_meals(philo->info);
 	if (elapsed_time(philo) >= philo->info->time_to_die)
 	{
 		philo->info->philo_died = 1;
@@ -111,7 +111,8 @@ void	is_dead(t_philo *philo)
 
 void	get_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0 && philo->info->philo_died == 0)
+	printf("ID -> %d\n", philo->id);
+	if (philo->id % 2 == 0)
 	{
 		is_dead(philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
@@ -121,7 +122,7 @@ void	get_forks(t_philo *philo)
 		print_msg("has taken the left fork", philo, BLUE);
 		print_msg("has taken the right fork", philo, BLUE);
 	}
-	else if (philo->id % 2 != 0 )
+	else if (philo->id != 1)
 	{
 		is_dead(philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
@@ -131,12 +132,15 @@ void	get_forks(t_philo *philo)
 		print_msg("has taken the right fork", philo, BLUE);
 		print_msg("has taken the left fork", philo, BLUE);
 	}
+	else
+		check_death_meals(philo->info);
 }
 
 void	start_routine(t_philo *philo)
 {
 	// !! avoid if statement beacuse of data-races !!
-	while(philo->info->must_eat && philo->meals != philo->info->must_eat)
+	while(philo->info->must_eat && philo->meals != philo->info->must_eat
+	&& !philo->info->philo_died)
 	{
 		get_forks(philo);
 		eat(philo);
@@ -150,9 +154,7 @@ void	start_routine(t_philo *philo)
 
 void	*routine(t_philo *philo)
 {
-	// !! avoid if statement beacuse of data-races !!
-	if (!philo->info->philo_died)
-		start_routine(philo);
+	start_routine(philo);
 	return (NULL);
 }
 
@@ -181,7 +183,7 @@ void	check_death_meals(t_info *info)
 {
 	if (info->num == 1)
 	{
-		//nap((t_philo*)info->philos[0], info->time_to_die);
+		nap(&info->philos[0], info->time_to_die);
 		//die(info);
 		printf("%s[%d] died\n%s", RED, info->philos[0].id, RESET);
 		//pthread_detach(info->philos[0].thread);
