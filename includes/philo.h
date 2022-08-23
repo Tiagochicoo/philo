@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 20:56:22 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:13:55 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	check_death_meals(t_info *info);
 void	error(char *msg);
 int		get_timestamp(void);
 int		elapsed_time(t_philo *philo);
-void	print_msg(char *msg, t_philo *philo, char *color);
+int		print_msg(char *msg, t_philo *philo, char *color);
 int		stop_meal(t_info *info);
 void	nap(t_philo *philo, int	sleep_time);
 void	drop_forks(t_philo *philo);

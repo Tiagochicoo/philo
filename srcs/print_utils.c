@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:01:01 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:13:30 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,12 @@ int	elapsed_time(t_philo *philo)
 	return (now - start);
 }
 
-void	print_msg(char *msg, t_philo *philo, char *color)
+int	print_msg(char *msg, t_philo *philo, char *color)
 {
 	int	timestamp;
 
-	pthread_mutex_lock(&philo->info->print_lock);
 	timestamp = elapsed_time(philo);
 	// insert death_lock mutex here??
 	printf("%s%d [%d] -> %s\n%s", color, timestamp, philo->id, msg, RESET);
-	pthread_mutex_unlock(&philo->info->print_lock);
+	return (timestamp);
 }
