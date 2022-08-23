@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Aug 18 18:24:38 2022
+# Make data base, printed on Tue Aug 23 18:56:54 2022
 
 # Variables
 
@@ -17,13 +17,15 @@ LC_ALL = C
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-F8ESQ1
+GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-XW5LR1
 # environment
 SBX_CHROME_API_RQ = 1
 # environment
 VSCODE_CWD = /nfs/homes/tpereira
 # environment
 LIBVIRT_DEFAULT_URI = qemu:///system
+# environment
+GDM_LANG = en
 # default
 MAKE_COMMAND := make
 # environment
@@ -51,7 +53,7 @@ XDG_DATA_DIRS = /app/share:/usr/share:/usr/share/runtime/share:/run/host/user-sh
 # environment
 VSCODE_CODE_CACHE_PATH = /nfs/homes/tpereira/.var/app/com.visualstudio.code/config/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
 # environment
-XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session3
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session1
 # environment
 LANG = C
 # environment
@@ -97,9 +99,9 @@ FLATPAK_SANDBOX_DIR = /nfs/homes/tpereira/.var/app/com.visualstudio.code/sandbox
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 24
+VSCODE_PID = 23
 # environment
-KRB5CCNAME = FILE:/tmp/krb5cc_10180_Do2PbX
+KRB5CCNAME = FILE:/tmp/krb5cc_10180_5ty994
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -111,7 +113,7 @@ XDG_DATA_HOME = /nfs/homes/tpereira/.var/app/com.visualstudio.code/data
 # environment
 SANDBOX_LD_PRELOAD = /app/bin/../lib/libzypak-preload-host.so:/app/bin/../lib/libzypak-preload-host-spawn-strategy.so
 # environment
-SESSION_MANAGER = local/c2r3s3.42lisboa.com:@/tmp/.ICE-unix/161372,unix/c2r3s3.42lisboa.com:/tmp/.ICE-unix/161372
+SESSION_MANAGER = local/c2r3s3.42lisboa.com:@/tmp/.ICE-unix/12954,unix/c2r3s3.42lisboa.com:/tmp/.ICE-unix/12954
 # automatic
 *F = $(notdir $*)
 # environment
@@ -150,6 +152,8 @@ MAKE = $(MAKE_COMMAND)
 PATH = /app/bin:/app/bin:/app/bin:/usr/bin:/nfs/homes/tpereira/.var/app/com.visualstudio.code/data/node_modules/bin
 # default
 MAKEFILES := 
+# environment
+LANGUAGE = en
 # automatic
 ^F = $(notdir $^)
 # environment
@@ -197,15 +201,15 @@ DISPLAY = :99.0
 # default
 MAKE_VERSION := 4.3
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 162166
+GIO_LAUNCHED_DESKTOP_FILE_PID = 13536
 # environment
-SSH_AGENT_PID = 161471
+SSH_AGENT_PID = 13052
 # environment
 _ = /usr/bin/make
 # environment
 XDG_RUNTIME_DIR = /run/user/10180
 # makefile (from 'makefile', line 15)
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g -Ofast
 # environment
 GPG_AGENT_INFO = /run/user/10180/gnupg/S.gpg-agent:0:1
 # environment
@@ -245,7 +249,7 @@ ZYPAK_BIN = /app/bin
 # environment
 GDMSESSION = ubuntu
 # variable set hash-table stats:
-# Load=117/1024=11%, Rehash=0, Collisions=17/155=11%
+# Load=119/1024=12%, Rehash=0, Collisions=18/156=12%
 
 # Pattern-specific Variable Values
 
@@ -318,9 +322,9 @@ all:
 # automatic
 # | := 
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=4/16=25%
+# Load=8/32=25%, Rehash=0, Collisions=3/15=20%
 #  recipe to execute (from 'makefile', line 21):
-	$(CC) $(CFLAGS) $(INC) $(SRCS) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 	printf "\e[38;5;46m ╔════════════════════════════════════╗\e[0m\n"
 	printf "\e[38;5;46m█▓▒░	      Philo Project         ░▒▓█ \e[0m\n"
 	printf "\e[38;5;46m█▓▒░		Compiled	    ░▒▓█ \e[0m\n"
@@ -337,7 +341,7 @@ fclean: clean
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-18 18:24:20.707745986
+#  Last modified 2022-08-23 16:27:30.578929134
 #  File has been updated.
 #  Successfully updated.
 
@@ -357,7 +361,7 @@ cc: all
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 28):
-	philo 3 1 2 3
+	./philo 3 1 2 3
 
 # files hash-table stats:
 # Load=10/1024=1%, Rehash=0, Collisions=0/32=0%
@@ -373,6 +377,6 @@ cc: all
 # strcache performance: lookups = 42 / hit rate = 54%
 # hash-table stats:
 # Load=19/8192=0%, Rehash=0, Collisions=0/42=0%
-# Finished Make data base on Thu Aug 18 18:24:38 2022
+# Finished Make data base on Tue Aug 23 18:56:54 2022
 
  
