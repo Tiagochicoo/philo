@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:27:32 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:11:49 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 22:01:53 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,20 @@ void	is_dead(t_philo *philo)
 {
 	if (philo->info->philo_died)
 		check_death_meals(philo->info);
-	if (elapsed_time(philo) >= philo->info->time_to_die)
+	if (since_last_meal(philo) >= philo->info->time_to_die)
 	{
+		pthread_mutex_lock(&philo->info->death_lock);
 		philo->info->philo_died = 1;
+		pthread_mutex_unlock(&philo->info->death_lock);
 		print_msg("has died", philo, RED);
-		check_death_meals(philo->info);
+		stop_meal(philo->info);
 	}
 }
 
 void	starve(t_info *info)
 {
 	info->philo_died = 1;
-	print_msg("has died", &info->philos[0], RED);
+	print_msg("ignore for now ---------------> has died", &info->philos[0], RED);
 	usleep(30000);
 }
 

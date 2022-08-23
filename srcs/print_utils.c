@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:13:30 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:53:39 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@ int	get_timestamp(void)
 
 	gettimeofday(&timestamp, NULL);
 	return ((timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000));
+}
+
+int	since_last_meal(t_philo *philo)
+{
+	int	now;
+
+	now = get_timestamp();
+	return (now - philo->eat_timestamp);
 }
 
 int	elapsed_time(t_philo *philo)
