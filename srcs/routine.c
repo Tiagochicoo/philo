@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 19:34:59 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 21:01:28 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/philo.h"
+#include "../includes/philo.h"
 
 int	stop_meal(t_info *info)
 {
@@ -86,36 +86,26 @@ void	eat(t_philo *philo)
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
 	philo->eat_timestamp = get_timestamp();
+	if (philo->meals == philo->info->must_eat)
+		philo->info->finish++;
 }
 
 void	get_forks(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		check_death_meals(philo->info);
-		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
-		pthread_mutex_lock(&philo->info->print_lock);
-		print_msg("has taken the left fork", philo, BLUE);
-		check_death_meals(philo->info);
-		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
-		print_msg("has taken the right fork", philo, BLUE);
-	}
-	else if (philo->id != 1)
-	{
-		check_death_meals(philo->info);
-		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
-		pthread_mutex_lock(&philo->info->print_lock);
-		print_msg("has taken the right fork", philo, BLUE);
-		check_death_meals(philo->info);
 		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
 		print_msg("has taken the left fork", philo, BLUE);
+		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
+		print_msg("has taken the right fork", philo, BLUE);
 	}
 	else
 	{
+		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
+		print_msg("has taken the right fork", philo, BLUE);
+		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
 		print_msg("has taken the left fork", philo, BLUE);
-		check_death_meals(philo->info);
 	}
-
 }
 
 void	*routine(t_philo *philo)
@@ -123,18 +113,12 @@ void	*routine(t_philo *philo)
 	// !! avoid if statement beacuse of data-races !!
 	while(philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
+		get_forks(philo);
+		eat(philo);
+		nap(philo, philo->info->time_to_sleep);
+		think(philo);
 		if (!philo->info->philo_died)
-		{
-			get_forks(philo);
-			eat(philo);
-			nap(philo, philo->info->time_to_sleep);
-			think(philo);
-			pthread_mutex_unlock(&philo->info->print_lock);
-			if (!philo->info->philo_died)
-				routine(philo);
-		}
-		else
-			break ;
+			routine(philo);
 	}
-	return (NULL)
+	return (NULL);
 }
