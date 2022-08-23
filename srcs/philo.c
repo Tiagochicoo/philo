@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 16:05:34 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 17:13:01 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,16 @@ int	elapsed_time(t_philo *philo)
 
 	now = get_timestamp();
 	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
-	// printf("start -> %d\n", start);
-	// printf("now -> %d\n", now);
 	return (now - start);
 }
 
-int	print_msg(char *msg, t_philo *philo, char *color)
+void	print_msg(char *msg, t_philo *philo, char *color)
 {
 	int	timestamp;
 
 	timestamp = elapsed_time(philo);
 	// insert death_lock mutex here??
 	printf("%s%d [%d] -> %s\n%s", color, timestamp, philo->id, msg, RESET);
-	return (timestamp);
 }
 
 void	think(t_philo *philo)
@@ -71,15 +68,11 @@ void	nap(t_philo *philo, int	sleep_time)
 
 void	eat(t_philo *philo)
 {
-	int timestamp;
-	
 	//add drop_forks()
-
-
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->info->print_lock);
-		timestamp = print_msg("is eating", philo, PURPLE);
+		print_msg("is eating", philo, PURPLE);
 		philo->meals++;
 		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
@@ -88,52 +81,54 @@ void	eat(t_philo *philo)
 	else
 	{
 		pthread_mutex_lock(&philo->info->print_lock);
-		timestamp = print_msg("is eating", philo, PURPLE);
+		print_msg("is eating", philo, PURPLE);
 		philo->meals++;
 		usleep(philo->info->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->info->forks[philo->id - 1]);
 		pthread_mutex_unlock(&philo->info->forks[philo->id % philo->info->num]);
 	}
-	philo->eat_timestamp = timestamp;
+	philo->eat_timestamp = get_timestamp();
 }
 
 void	is_dead(t_philo *philo)
 {
-	// if (philo->info->philo_died)
-	// 	check_death_meals(philo->info);
 	if (elapsed_time(philo) >= philo->info->time_to_die)
 	{
 		philo->info->philo_died = 1;
 		print_msg("has died", philo, RED);
-		check_death_meals(philo->info);
+		usleep(100);
+		start_routine(philo);
 	}
 }
 
 void	get_forks(t_philo *philo)
 {
-	printf("ID -> %d\n", philo->id);
 	if (philo->id % 2 == 0)
 	{
 		is_dead(philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
-		is_dead(philo);
-		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
 		pthread_mutex_lock(&philo->info->print_lock);
 		print_msg("has taken the left fork", philo, BLUE);
+		is_dead(philo);
+		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
 		print_msg("has taken the right fork", philo, BLUE);
 	}
 	else if (philo->id != 1)
 	{
 		is_dead(philo);
 		pthread_mutex_lock(&philo->info->forks[philo->id % philo->info->num]);
-		is_dead(philo);
-		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
 		pthread_mutex_lock(&philo->info->print_lock);
 		print_msg("has taken the right fork", philo, BLUE);
+		is_dead(philo);
+		pthread_mutex_lock(&philo->info->forks[philo->id - 1]);
 		print_msg("has taken the left fork", philo, BLUE);
 	}
-	else
-		check_death_meals(philo->info);
+	// else
+	// {
+	// 	print_msg("has taken the left fork", philo, BLUE);
+	// 	is_dead(philo);
+	// }
+
 }
 
 void	start_routine(t_philo *philo)
@@ -183,9 +178,9 @@ void	check_death_meals(t_info *info)
 {
 	if (info->num == 1)
 	{
-		nap(&info->philos[0], info->time_to_die);
+		usleep(info->time_to_die * 1000);
 		//die(info);
-		printf("%s[%d] died\n%s", RED, info->philos[0].id, RESET);
+		printf("%d  has died\n", info->philos[0].id);
 		//pthread_detach(info->philos[0].thread);
 		//exit(1);
 	}
@@ -208,7 +203,7 @@ void	create_philos(t_info *info)
 		create_philo(info, i);
 		i++;
 	}
-	check_death_meals(info);
+	//check_death_meals(info);
 	i = 0;
 	while (i < info->num)
 	{
@@ -262,6 +257,7 @@ void	set_params(t_info *info, char **argv)
 		info->time_to_eat = atoi(argv[3]);
 		info->time_to_sleep = atoi(argv[4]);
 		info->finish = 0;
+		info->philo_died = 0;
 		if (argv[5])
 			info->must_eat = atoi(argv[5]);
 		else

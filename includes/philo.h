@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/22 22:20:40 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/23 16:50:42 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_info
 }				t_info;
 
 void	*routine(t_philo *philo);
+void	start_routine(t_philo *philo);
 void	check_death_meals(t_info *info);
 
 #endif
