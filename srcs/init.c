@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:55:02 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/24 16:59:57 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,14 @@ void	create_thread(t_info *info, int	i)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (error("Failed to malloc philo!\n"));
-	philo->thread = (pthread_t)malloc(sizeof(pthread_t));
-	if (!philo->thread)
-		return (error("Failed to malloc thread!\n"));
 	philo->info = info;
 	philo->id = i + 1;
 	philo->eat_timestamp = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
 	philo->left_fork = philo->info->forks[i];
 	philo->right_fork = philo->info->forks[i + 1 ];
 	philo->meals = 0;
-	philo->info->philos[i].thread = philo->thread;
-	if (pthread_create(&info->philos[i].thread, NULL, (void *)&routine, philo) != 0)
+	philo->info->philos[i] = philo;
+	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 

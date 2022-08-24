@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:54:24 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/24 17:00:13 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 typedef struct s_philo
 {
 	pthread_t		thread;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	int				id;
 	int				meals;
 	int				eat_timestamp;
@@ -47,13 +47,13 @@ typedef struct s_info
 	int					finish;
 	int					philo_died;
 	struct timeval		start_time;
-	struct s_philo		*philos;
+	struct s_philo		**philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_lock;
 	pthread_mutex_t		death_lock;
 }				t_info;
 
-void	create_thread(t_info *info, int	i);
+void	create_thread(t_info *info, int i);
 void	create_philos(t_info *info);
 void	create_forks(t_info *info);
 int		check_args(char **argv);
@@ -67,7 +67,7 @@ int		elapsed_time(t_philo *philo);
 int		since_last_meal(t_philo *philo);
 int		print_msg(char *msg, t_philo *philo, char *color);
 void	stop_meal(t_info *info);
-void	nap(t_philo *philo, int	sleep_time);
+void	nap(t_philo *philo, int sleep_time);
 void	drop_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	get_forks(t_philo *philo);

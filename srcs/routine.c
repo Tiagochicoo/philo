@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:55:34 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/24 16:50:04 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	free_all(void *ptr)
-{
-	int i;
+// void	free_all(void *ptr)
+// {
+// 	int i;
 
-	i = 0;
-	while(&ptr[i])
-		free(&ptr[i++]);
-}
+// 	i = 0;
+// 	while(ptr[i])
+// 		free(ptr[i++]);
+// }
 
 void	stop_meal(t_info *info)
 {
