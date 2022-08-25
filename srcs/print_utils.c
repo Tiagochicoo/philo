@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/23 21:53:39 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/25 20:00:13 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	error(char *msg)
 	exit(1);
 }
 
-int	get_timestamp(void)
+long	get_timestamp(void)
 {
 	struct timeval	timestamp;
 
@@ -34,10 +34,10 @@ int	since_last_meal(t_philo *philo)
 	return (now - philo->eat_timestamp);
 }
 
-int	elapsed_time(t_philo *philo)
+long	elapsed_time(t_philo *philo)
 {
-	int				now;
-	int				start;
+	long	now;
+	long	start;
 
 	now = get_timestamp();
 	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
@@ -46,10 +46,10 @@ int	elapsed_time(t_philo *philo)
 
 int	print_msg(char *msg, t_philo *philo, char *color)
 {
-	int	timestamp;
+	long	timestamp;
 
 	timestamp = elapsed_time(philo);
 	// insert death_lock mutex here??
-	printf("%s%d [%d] -> %s\n%s", color, timestamp, philo->id, msg, RESET);
+	printf("%s%ld [%d] -> %s\n%s", color, timestamp, philo->id, msg, RESET);
 	return (timestamp);
 }

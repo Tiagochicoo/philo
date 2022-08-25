@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/24 16:59:57 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/24 22:11:23 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	create_thread(t_info *info, int	i)
 		return (error("Failed to malloc philo!\n"));
 	philo->info = info;
 	philo->id = i + 1;
-	philo->eat_timestamp = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
-	philo->left_fork = philo->info->forks[i];
-	philo->right_fork = philo->info->forks[i + 1 ];
+	philo->eat_timestamp = get_timestamp();
+	philo->left_fork = &philo->info->forks[i];
+	philo->right_fork = &philo->info->forks[i + 1 ];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
@@ -44,7 +44,7 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 	{
-		pthread_join(info->philos[i].thread, NULL);
+		pthread_join(info->philos[i]->thread, NULL);
 		pthread_mutex_lock(&info->print_lock);
 		printf("Joined thread %d!!\n", ++i);
 		pthread_mutex_unlock(&info->print_lock);

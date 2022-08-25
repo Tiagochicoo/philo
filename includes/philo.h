@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/24 17:00:13 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/25 20:02:23 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	int				id;
 	int				meals;
-	int				eat_timestamp;
+	long			eat_timestamp;
 	struct s_info	*info;
 }				t_philo;
 
@@ -62,8 +62,8 @@ void	is_dead(t_philo *philo);
 void	starve(t_info *info);
 void	check_death_meals(t_info *info);
 void	error(char *msg);
-int		get_timestamp(void);
-int		elapsed_time(t_philo *philo);
+long	get_timestamp(void);
+long	elapsed_time(t_philo *philo);
 int		since_last_meal(t_philo *philo);
 int		print_msg(char *msg, t_philo *philo, char *color);
 void	stop_meal(t_info *info);
