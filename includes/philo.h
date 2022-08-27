@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/25 20:02:23 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/27 19:55:42 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int		check_args(char **argv);
 void	set_params(t_info *info, char **argv);
 void	is_dead(t_philo *philo);
 void	starve(t_info *info);
-void	check_death_meals(t_info *info);
+void	check_death_meals(t_philo *philo);
 void	error(char *msg);
 long	get_timestamp(void);
 long	elapsed_time(t_philo *philo);

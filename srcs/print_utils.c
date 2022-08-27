@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/25 20:00:13 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/27 20:00:34 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ long	get_timestamp(void)
 
 int	since_last_meal(t_philo *philo)
 {
-	int	now;
+	long	now;
 
 	now = get_timestamp();
 	return (now - philo->eat_timestamp);
