@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/24 22:11:23 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/28 18:53:44 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,35 @@ void	create_thread(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
+void	checker(t_info *info)
+{
+	int		i;
+	long	time;
+
+	time = 0;
+	while (1)
+	{
+		i = info->num - 1;
+		while (info->philos[i])
+		{
+			time = since_last_meal(info->philos[i]);
+			//printf("[%d] now -> %ld\ntime -> %ld\n", i + 1,  now, time);
+			if (time > info->time_to_die)
+			{
+				pthread_mutex_lock(&info->death_lock);
+				info->philo_died = i;
+				print_msg("has died", info->philos[i], RED);
+				pthread_mutex_unlock(&info->death_lock);
+				stop_meal(info);
+				break ;
+			}
+			i--;
+		}
+		if (info->philo_died > 0)
+			break ;
+	}
+}
+
 void	create_philos(t_info *info)
 {
 	int i;
@@ -41,6 +70,7 @@ void	create_philos(t_info *info)
 		i++;
 	}
 	//check_death_meals(info);
+	checker(info);
 	i = 0;
 	while (i < info->num)
 	{
