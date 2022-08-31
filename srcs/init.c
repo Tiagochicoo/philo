@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/28 18:53:44 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/31 09:24:38 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	create_thread(t_info *info, int	i)
 		return (error("Failed to malloc philo!\n"));
 	philo->info = info;
 	philo->id = i + 1;
+	philo->is_dead = 0;
 	philo->eat_timestamp = get_timestamp();
 	philo->left_fork = &philo->info->forks[i];
 	philo->right_fork = &philo->info->forks[i + 1 ];
@@ -46,6 +47,7 @@ void	checker(t_info *info)
 			if (time > info->time_to_die)
 			{
 				pthread_mutex_lock(&info->death_lock);
+				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
 				print_msg("has died", info->philos[i], RED);
 				pthread_mutex_unlock(&info->death_lock);

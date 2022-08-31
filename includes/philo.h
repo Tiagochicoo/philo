@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/27 19:55:42 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/28 18:59:19 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	int				id;
 	int				meals;
+	int				is_dead;
 	long			eat_timestamp;
 	struct s_info	*info;
 }				t_philo;

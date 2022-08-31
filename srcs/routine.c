@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/28 18:56:21 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/31 09:24:06 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ void	stop_meal(t_info *info)
 {
 	int	i;
 
-	printf("stop meal\n");
 	i = info->num - 1;
 	while (i)
 	{
-		if (pthread_join(info->philos[i]->thread, NULL))
+		if (pthread_detach(info->philos[i]->thread))
 			break ;
 		i--;
 	}
@@ -40,6 +39,7 @@ void	stop_meal(t_info *info)
 			break ;
 		i++;
 	}
+	pthread_mutex_unlock(&info->death_lock);
 	pthread_mutex_destroy(&info->print_lock);
 	pthread_mutex_destroy(&info->death_lock);
 	//free(info->forks);
@@ -50,15 +50,21 @@ void	stop_meal(t_info *info)
 
 void	think(t_philo *philo)
 {
-	if (philo->meals != philo->info->must_eat)
-		print_msg("is thinking", philo, YELLOW);
+	if (!philo->is_dead)
+	{
+		if (philo->meals != philo->info->must_eat)
+			print_msg("is thinking", philo, YELLOW);
+	}
 }
 
 void	nap(t_philo *philo, int	sleep_time)
 {
-	pthread_mutex_lock(&philo->info->print_lock);
-	print_msg("is sleeping", philo, GREEN);
-	usleep(sleep_time * 1000);
+	if (!philo->is_dead)
+	{
+		pthread_mutex_lock(&philo->info->print_lock);
+		print_msg("is sleeping", philo, GREEN);
+		usleep(sleep_time * 1000);
+	}
 }
 
 void	drop_forks(t_philo *philo)
@@ -100,7 +106,7 @@ void	eat(t_philo *philo)
 
 void	get_forks(t_philo *philo)
 {
-	if (philo->info->philo_died == 0)
+	if (!philo->is_dead)
 	{
 		if (philo->id % 2 == 0)
 		{
@@ -128,16 +134,11 @@ void	start_routine(t_philo *philo)
 	// !! avoid if statement beacuse of data-races !!
 		if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 		{
-			if (philo->info->philo_died == 0)
-				get_forks(philo);
-			if (philo->info->philo_died == 0)	
-				eat(philo);
-			if (philo->info->philo_died == 0)	
-				nap(philo, philo->info->time_to_sleep);
-			if (philo->info->philo_died == 0)	
-				think(philo);
-			if (philo->info->philo_died == 0)	
-				routine(philo);
+			get_forks(philo);
+			eat(philo);
+			nap(philo, philo->info->time_to_sleep);
+			think(philo);
+			routine(philo);
 		}
 	}
 }
@@ -145,7 +146,7 @@ void	start_routine(t_philo *philo)
 void	*routine(t_philo *philo)
 {
 	// !! avoid if statement beacuse of data-races !!
-	if (philo->info->num != 1 && philo->info->philo_died == 0)
+	if (philo->info->num != 1 && !philo->is_dead)
 		start_routine(philo);
 	else
 		check_death_meals(philo);

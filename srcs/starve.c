@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:27:32 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/28 18:02:03 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/31 09:21:12 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	is_dead(t_philo *philo)
 	if (last_meal >= philo->info->time_to_die)
 	{
 		pthread_mutex_lock(&philo->info->death_lock);
+		philo->is_dead = 1;
 		philo->info->philo_died = philo->id;
 		pthread_mutex_unlock(&philo->info->death_lock);
 		check_death_meals(philo);
@@ -53,7 +54,7 @@ void	check_death_meals(t_philo *philo)
 		printf("philo->info->philo_died [%d]\n", philo->info->philo_died);
 		//printf("time to die usleep(%ld)\n", elapsed_time(philo) - philo->info->time_to_die);
 		//usleep(elapsed_time(philo->info->philos[philo->info->philo_died - 1]) - philo->info->time_to_die);
-		print_msg("has died", philo, RED);
+		print_msg("...has died", philo, RED);
 	}
 	stop_meal(philo->info);
 }
