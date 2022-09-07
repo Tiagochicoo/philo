@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/31 09:24:38 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/07 17:04:52 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	checker(t_info *info)
 	while (1)
 	{
 		i = info->num - 1;
-		while (info->philos[i])
+		while (i)
 		{
 			time = since_last_meal(info->philos[i]);
 			//printf("[%d] now -> %ld\ntime -> %ld\n", i + 1,  now, time);
@@ -49,7 +49,7 @@ void	checker(t_info *info)
 				pthread_mutex_lock(&info->death_lock);
 				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
-				print_msg("has died", info->philos[i], RED);
+				print_msg("died", info->philos[i], RED);
 				pthread_mutex_unlock(&info->death_lock);
 				stop_meal(info);
 				break ;
@@ -98,6 +98,7 @@ void	create_forks(t_info *info)
 		else
 			error("Error!! Failed to create fork!\n");
 	}
+	pthread_mutex_init(&info->print_lock, NULL);
 }
 
 //need better parsing here -> check "1a" arguments

@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/28 18:19:11 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/08/31 16:12:52 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ int	print_msg(char *msg, t_philo *philo, char *color)
 
 	timestamp = elapsed_time(philo);
 	// insert death_lock mutex here??
-	printf("%s%ld [%d] -> %s\n%s", color, timestamp, philo->id, msg, RESET);
+	printf("%s%ld %d %s\n%s", color, timestamp, philo->id, msg, RESET);
 	return (timestamp);
 }
