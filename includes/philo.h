@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/28 18:59:19 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/07 19:53:38 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_info
 	struct s_philo		**philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_lock;
+	pthread_mutex_t		time_lock;
 	pthread_mutex_t		death_lock;
 }				t_info;
 
