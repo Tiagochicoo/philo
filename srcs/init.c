@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/08 22:57:21 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/08 23:00:39 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	checker(t_info *info)
 			if (time > info->time_to_die)
 			{
 				pthread_mutex_lock(&info->death_lock);
+				printf("\n\n\n -------------- DATA RACES ----------------\n\n\n");
 				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
 				pthread_mutex_unlock(&info->death_lock);
