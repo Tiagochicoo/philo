@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/08 22:40:23 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/08 22:57:44 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	eat(t_philo *philo)
 {
 	print_msg("is eating", philo, PURPLE);
 	philo->meals++;
+	printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
 	pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
 	pthread_mutex_unlock(&philo->info->time_lock);
@@ -99,9 +100,9 @@ void	get_forks(t_philo *philo)
 		pthread_mutex_lock(&philo->info->print_lock);
 		if (philo->id % 2 == 0)
 		{
-			printf("\nphilo %d\n", philo->id);
-			printf("fork %d -> %p\n", philo->id, philo->left_fork);
-			printf("fork %d -> %p\n", (philo->id + 1) % philo->info->num, philo->right_fork);
+			// printf("\nphilo %d\n", philo->id);
+			// printf("fork %d -> %p\n", philo->id, philo->left_fork);
+			// printf("fork %d -> %p\n", (philo->id + 1) % philo->info->num, philo->right_fork);
 			pthread_mutex_lock(philo->left_fork);
 			pthread_mutex_lock(philo->right_fork);
 			print_msg("has taken a fork", philo, BLUE);
@@ -109,9 +110,9 @@ void	get_forks(t_philo *philo)
 		}
 		else
 		{
-			printf("\nphilo %d\n", philo->id);
-			printf("fork %d -> %p\n", (philo->id + 1) % philo->info->num, philo->right_fork);
-			printf("fork %d -> %p\n", philo->id, philo->left_fork);
+			// printf("\nphilo %d\n", philo->id);
+			// printf("fork %d -> %p\n", (philo->id + 1) % philo->info->num, philo->right_fork);
+			// printf("fork %d -> %p\n", philo->id, philo->left_fork);
 			pthread_mutex_lock(philo->right_fork);
 			pthread_mutex_lock(philo->left_fork);
 			print_msg("has taken a fork", philo, BLUE);

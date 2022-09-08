@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/07 19:45:35 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/08 22:50:24 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	since_last_meal(t_philo *philo)
 	long	now;
 
 	now = get_timestamp();
-	return (now - philo->eat_timestamp);
+	pthread_mutex_lock(&philo->info->time_lock);
+	now -= philo->eat_timestamp;
+	pthread_mutex_unlock(&philo->info->time_lock);
+	return (now);
 }
 
 long	elapsed_time(t_philo *philo)
