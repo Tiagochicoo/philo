@@ -51,8 +51,9 @@ int	print_msg(char *msg, t_philo *philo, char *color)
 {
 	long	timestamp;
 
+	pthread_mutex_lock(&philo->info->print_lock);
 	timestamp = elapsed_time(philo);
-	// insert death_lock mutex here??
 	printf("%s%ld %d %s\n%s", color, timestamp, philo->id, msg, RESET);
+	pthread_mutex_unlock(&philo->info->print_lock);
 	return (timestamp);
 }

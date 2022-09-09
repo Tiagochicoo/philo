@@ -53,9 +53,9 @@ void	checker(t_info *info)
 				printf("\n\n\n -------------- DATA RACES ----------------\n\n\n");
 				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
-				pthread_mutex_unlock(&info->death_lock);
 				print_msg("died", info->philos[i], RED);
 				stop_meal(info);
+				pthread_mutex_unlock(&info->death_lock);
 				break ;
 			}
 			i--;
@@ -63,6 +63,7 @@ void	checker(t_info *info)
 		if (info->philo_died > 0)
 			break ;
 	}
+	pthread_mutex_unlock(&info->death_lock);
 }
 
 void	create_philos(t_info *info)
@@ -105,6 +106,7 @@ void	create_forks(t_info *info)
 	}
 	pthread_mutex_init(&info->print_lock, NULL);
 	pthread_mutex_init(&info->time_lock, NULL);
+	pthread_mutex_init(&info->death_lock, NULL);
 }
 
 //need better parsing here -> check "1a" arguments
