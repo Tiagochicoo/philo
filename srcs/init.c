@@ -22,11 +22,16 @@ void	create_thread(t_info *info, int	i)
 	philo->info = info;
 	philo->id = i + 1;
 	philo->is_dead = 0;
+	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
+	pthread_mutex_lock(&philo->info->death_lock);
 	philo->eat_timestamp = get_timestamp();
+	pthread_mutex_unlock(&philo->info->death_lock);
 	philo->left_fork = &philo->info->forks[i];
-	philo->right_fork = &philo->info->forks[i + 1 ];
+	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
+	if (philo->id % 2 == 0)
+		usleep(100);
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
@@ -42,18 +47,17 @@ void	checker(t_info *info)
 		i = info->num - 1;
 		while (i)
 		{
+			pthread_mutex_lock(&info->death_lock);
 			time = since_last_meal(info->philos[i]);
-			//printf("[%d] now -> %ld\ntime -> %ld\n", i + 1,  now, time);
 			if (time > info->time_to_die)
 			{
-				pthread_mutex_lock(&info->death_lock);
 				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
 				print_msg("died", info->philos[i], RED);
-				pthread_mutex_unlock(&info->death_lock);
 				stop_meal(info);
 				break ;
 			}
+			pthread_mutex_unlock(&info->death_lock);
 			i--;
 		}
 		if (info->philo_died > 0)
@@ -67,10 +71,7 @@ void	create_philos(t_info *info)
 	
 	i = 0;
 	while (i < info->num)
-	{
-		create_thread(info, i);
-		i++;
-	}
+		create_thread(info, i++);
 	//check_death_meals(info);
 	checker(info);
 	i = 0;
@@ -94,11 +95,15 @@ void	create_forks(t_info *info)
 	while (i < info->num)
 	{
 		if (!pthread_mutex_init(&info->forks[i], NULL))
+		{
+			printf("fork [%d] at -> %p\n", i, &info->forks[i]);
 			i++;
+		}
 		else
 			error("Error!! Failed to create fork!\n");
 	}
 	pthread_mutex_init(&info->print_lock, NULL);
+	pthread_mutex_init(&info->death_lock, NULL);
 }
 
 //need better parsing here -> check "1a" arguments
