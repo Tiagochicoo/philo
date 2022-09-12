@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/07 17:14:41 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/12 18:05:16 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ void	eat(t_philo *philo)
 	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
 	print_msg("is eating", philo, PURPLE);
 	philo->meals++;
-	pthread_mutex_lock(&philo->info->death_lock);
+	pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
-	pthread_mutex_unlock(&philo->info->death_lock);
+	pthread_mutex_unlock(&philo->info->time_lock);
 	usleep(philo->info->time_to_eat * 1000);
 	drop_forks(philo);
 }

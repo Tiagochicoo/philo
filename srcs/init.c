@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/07 17:04:52 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/12 18:05:46 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	create_forks(t_info *info)
 	}
 	pthread_mutex_init(&info->print_lock, NULL);
 	pthread_mutex_init(&info->death_lock, NULL);
+	pthread_mutex_init(&info->time_lock, NULL);
 }
 
 //need better parsing here -> check "1a" arguments
