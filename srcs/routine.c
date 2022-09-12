@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/07 17:14:41 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/12 23:29:37 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,16 @@ void	*start_routine(t_philo *philo)
 	eat(philo);
 	nap(philo, philo->info->time_to_sleep);
 	think(philo);
-	if (philo->info->must_eat && philo->meals != philo->info->must_eat)
+	if (philo->eat_timestamp - get_timestamp() > philo->info->time_to_die)
+	{
+		print_msg("died", philo, RED);
+		philo->info->finish++;
+		join_threads(philo->info);
+	}
+	else if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 		start_routine(philo);
 	pthread_mutex_lock(&philo->info->death_lock);
-	philo->info->finish++; 
+	philo->info->finish++;
 	pthread_mutex_unlock(&philo->info->death_lock);
 	return (NULL);
 }
@@ -123,6 +129,5 @@ void	*routine(t_philo *philo)
 		philo->info->philo_died = 1;
 		pthread_mutex_unlock(&philo->info->death_lock);
 	}
-	printf("philo [%d] routine\n", philo->id);
 	return (NULL);
 }

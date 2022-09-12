@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/12 18:05:46 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/12 23:30:07 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	create_thread(t_info *info, int	i)
 	philo->info = info;
 	philo->id = i + 1;
 	philo->is_dead = 0;
-	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
 	//pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
+	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp, &philo->eat_timestamp);
 	//pthread_mutex_unlock(&philo->info->time_lock);
 	philo->left_fork = &philo->info->forks[i];
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
@@ -66,18 +66,27 @@ void	checker(t_info *info)
 
 void	check_death(t_info *info)
 {
+	int num;
+
+	num = 0;
+	if (info->must_eat > 0)
+		num = info->num * info->must_eat;
 	while (1)
 	{
 		pthread_mutex_lock(&info->death_lock);
-		if (info->philo_died || info->finish == info->num)
+		if (info->philo_died || info->finish == num)
 		{
 			pthread_mutex_unlock(&info->death_lock);
-			stop_meal(info);
+			join_threads(info);
 			break ;
 		}
 		pthread_mutex_unlock(&info->death_lock);
-		//usleep(500);
+		pthread_mutex_lock(&info->death_lock);
+		if (num > 0 && info->finish == num)
+			break ;
+		pthread_mutex_unlock(&info->death_lock);
 	}
+	pthread_mutex_unlock(&info->death_lock);
 }
 
 void	create_philos(t_info *info)
@@ -87,17 +96,9 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	printf("philo X exit\n");
 	check_death(info);
 	//checker(info);
-	i = 0;
-	while (i < info->num)
-	{
-		pthread_join(info->philos[i]->thread, NULL);
-		pthread_mutex_lock(&info->print_lock);
-		printf("Joined thread %d!!\n", ++i);
-		pthread_mutex_unlock(&info->print_lock);
-	}
+	join_threads(info);
 }
 
 void	create_forks(t_info *info)
