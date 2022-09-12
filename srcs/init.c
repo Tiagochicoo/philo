@@ -30,8 +30,6 @@ void	create_thread(t_info *info, int	i)
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
-	if (philo->id % 2 == 0)
-		usleep(500);
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
@@ -54,6 +52,7 @@ void	checker(t_info *info)
 				info->philos[i]->is_dead = 1;
 				info->philo_died = i;
 				print_msg("died", info->philos[i], RED);
+				pthread_mutex_unlock(&info->death_lock);
 				stop_meal(info);
 				break ;
 			}
@@ -92,8 +91,8 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	check_death(info);
-	checker(info);
+	//check_death(info);
+	//checker(info);
 	i = 0;
 	while (i < info->num)
 	{

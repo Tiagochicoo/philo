@@ -22,11 +22,8 @@ void	stop_meal(t_info *info)
 	i = 0;
 	while (i < info->num)
 	{
-		if (pthread_mutex_unlock(&info->forks[i]))
-        {
-            pthread_mutex_destroy(&info->forks[i]);
+		if (pthread_mutex_destroy(&info->forks[i]))
 			break ;
-        }
         i++;
 	}
 	//pthread_mutex_unlock(&info->print_lock);
