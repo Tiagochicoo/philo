@@ -23,15 +23,15 @@ void	create_thread(t_info *info, int	i)
 	philo->id = i + 1;
 	philo->is_dead = 0;
 	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
-	pthread_mutex_lock(&philo->info->death_lock);
+	pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
-	pthread_mutex_unlock(&philo->info->death_lock);
+	pthread_mutex_unlock(&philo->info->time_lock);
 	philo->left_fork = &philo->info->forks[i];
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
 	if (philo->id % 2 == 0)
-		usleep(100);
+		usleep(500);
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
@@ -79,6 +79,7 @@ void	check_death(t_info *info)
 			stop_meal(info);
 			break ;
 		}
+		pthread_mutex_unlock(&info->death_lock);
 		i++;
 		//usleep(500);
 	}
@@ -114,10 +115,7 @@ void	create_forks(t_info *info)
 	while (i < info->num)
 	{
 		if (!pthread_mutex_init(&info->forks[i], NULL))
-		{
-			printf("fork  [%d] at -> %p\n", i, &info->forks[i]);
 			i++;
-		}
 		else
 			error("Error!! Failed to create fork!\n");
 	}
