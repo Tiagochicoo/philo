@@ -66,20 +66,16 @@ void	checker(t_info *info)
 
 void	check_death(t_info *info)
 {
-	int	i;
-
-	i = 0;
-	while (i < info->num && !info->philo_died)
+	while (1)
 	{
 		pthread_mutex_lock(&info->death_lock);
-		if (elapsed_time(info) - info->philos[i]->eat_timestamp > info->time_to_die)
+		if (info->philo_died || info->finish == info->num)
 		{
 			pthread_mutex_unlock(&info->death_lock);
 			stop_meal(info);
 			break ;
 		}
 		pthread_mutex_unlock(&info->death_lock);
-		i++;
 		//usleep(500);
 	}
 }
@@ -91,7 +87,8 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	//check_death(info);
+	printf("philo X exit\n");
+	check_death(info);
 	//checker(info);
 	i = 0;
 	while (i < info->num)
