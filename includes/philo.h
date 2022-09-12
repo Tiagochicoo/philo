@@ -64,7 +64,7 @@ void	starve(t_info *info);
 void	check_death_meals(t_philo *philo);
 void	error(char *msg);
 long	get_timestamp(void);
-long	elapsed_time(t_philo *philo);
+long	elapsed_time(t_info *info);
 int		since_last_meal(t_philo *philo);
 int		print_msg(char *msg, t_philo *philo, char *color);
 void	stop_meal(t_info *info);
@@ -73,5 +73,6 @@ void	drop_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	get_forks(t_philo *philo);
 void	*routine(t_philo *philo);
+void	check_death(t_info *info);
 
 #endif

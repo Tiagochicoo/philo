@@ -65,6 +65,25 @@ void	checker(t_info *info)
 	}
 }
 
+void	check_death(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->num && !info->philo_died)
+	{
+		pthread_mutex_lock(&info->death_lock);
+		if (elapsed_time(info) - info->philos[i]->eat_timestamp > info->time_to_die)
+		{
+			pthread_mutex_unlock(&info->death_lock);
+			stop_meal(info);
+			break ;
+		}
+		i++;
+		//usleep(500);
+	}
+}
+
 void	create_philos(t_info *info)
 {
 	int i;
@@ -72,7 +91,7 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	//check_death_meals(info);
+	check_death(info);
 	checker(info);
 	i = 0;
 	while (i < info->num)
@@ -96,7 +115,7 @@ void	create_forks(t_info *info)
 	{
 		if (!pthread_mutex_init(&info->forks[i], NULL))
 		{
-			printf("fork [%d] at -> %p\n", i, &info->forks[i]);
+			printf("fork  [%d] at -> %p\n", i, &info->forks[i]);
 			i++;
 		}
 		else

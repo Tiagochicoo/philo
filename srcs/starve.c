@@ -41,20 +41,7 @@ void	starve(t_info *info)
 
 void	check_death_meals(t_philo *philo)
 {
-	if (philo->info->num == 1)
-	{
-		pthread_mutex_lock(&philo->info->forks[0]);
-		print_msg("has taken a fork", philo, BLUE);
-		usleep(philo->info->time_to_die * 1000);
-		pthread_mutex_unlock(philo->left_fork);
-		print_msg("died", philo, RED);
-	}
-	else if (philo->info->philo_died)
-	{
-		printf("philo->info->philo_died [%d]\n", philo->info->philo_died);
-		//printf("time to die usleep(%ld)\n", elapsed_time(philo) - philo->info->time_to_die);
-		//usleep(elapsed_time(philo->info->philos[philo->info->philo_died - 1]) - philo->info->time_to_die);
-		print_msg("died", philo, RED);
-	}
+	printf("philo->info->philo_died [%d]\n", philo->info->philo_died);
+	print_msg("died", philo, RED);
 	stop_meal(philo->info);
 }

@@ -11,3 +11,26 @@
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	stop_meal(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->num)
+		pthread_detach(info->philos[i++]->thread);
+	i = 0;
+	while (i < info->num)
+	{
+		if (pthread_mutex_destroy(&info->forks[i++]))
+			break ;
+	}
+	//pthread_mutex_unlock(&info->print_lock);
+	//pthread_mutex_unlock(&info->death_lock);
+	//pthread_mutex_destroy(&info->print_lock);
+	//pthread_mutex_destroy(&info->death_lock);
+	free(info->forks);
+	//free(info->philos);
+	//free(info);
+	exit (1);
+}

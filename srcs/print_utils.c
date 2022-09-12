@@ -34,18 +34,18 @@ int	since_last_meal(t_philo *philo)
 	return (now - philo->eat_timestamp);
 }
 
-long	elapsed_time(t_philo *philo)
+long	elapsed_time(t_info *info)
 {
 	long	now;
 	long	start;
 
 	now = get_timestamp();
-	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
+	start = (info->start_time.tv_sec * 1000) + (info->start_time.tv_usec / 1000);
 	return (now - start);
 }
 
 int	print_msg(char *msg, t_philo *philo, char *color)
 {
-	printf("%s%ld %d %s\n%s", color, elapsed_time(philo), philo->id, msg, RESET);
-	return (elapsed_time(philo));
+	printf("%s%ld %d %s\n%s", color, elapsed_time(philo->info), philo->id, msg, RESET);
+	return (elapsed_time(philo->info));
 }
