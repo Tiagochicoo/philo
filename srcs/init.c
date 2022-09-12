@@ -23,9 +23,9 @@ void	create_thread(t_info *info, int	i)
 	philo->id = i + 1;
 	philo->is_dead = 0;
 	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
-	pthread_mutex_lock(&philo->info->time_lock);
+	//pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
-	pthread_mutex_unlock(&philo->info->time_lock);
+	//pthread_mutex_unlock(&philo->info->time_lock);
 	philo->left_fork = &philo->info->forks[i];
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;

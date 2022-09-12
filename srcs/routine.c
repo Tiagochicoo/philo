@@ -27,29 +27,29 @@
 
 void	think(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->death_lock);
+	//pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->info->philo_died)
 	{
-		pthread_mutex_unlock(&philo->info->death_lock);
+		//pthread_mutex_unlock(&philo->info->death_lock);
 		if (philo->meals != philo->info->must_eat)
 			print_msg("is thinking", philo, YELLOW);
 	}
-	else
-		pthread_mutex_unlock(&philo->info->death_lock);
+	// else
+	// 	pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	nap(t_philo *philo, int	sleep_time)
 {
-	pthread_mutex_lock(&philo->info->death_lock);
+	//pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->info->philo_died)
 	{
-		pthread_mutex_unlock(&philo->info->death_lock);
-		pthread_mutex_lock(&philo->info->print_lock);
+		//pthread_mutex_unlock(&philo->info->death_lock);
+		//pthread_mutex_lock(&philo->info->print_lock);
 		print_msg("is sleeping", philo, GREEN);
 		usleep(sleep_time * 1000);
 	}
-	else
-		pthread_mutex_unlock(&philo->info->death_lock);
+	// else
+	// 	pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	drop_forks(t_philo *philo)
@@ -68,12 +68,12 @@ void	drop_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
+	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
 	print_msg("is eating", philo, PURPLE);
 	philo->meals++;
-	pthread_mutex_lock(&philo->info->death_lock);
+	//pthread_mutex_lock(&philo->info->death_lock);
 	philo->eat_timestamp = get_timestamp();
-	pthread_mutex_unlock(&philo->info->death_lock);
+	//pthread_mutex_unlock(&philo->info->death_lock);
 	usleep(philo->info->time_to_eat * 1000);
 	drop_forks(philo);
 }
