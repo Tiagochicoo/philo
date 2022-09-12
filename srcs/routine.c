@@ -13,7 +13,7 @@
 #include "../includes/philo.h"
 
 
-//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
+//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
 
 
 // void	free_all(void *ptr)
