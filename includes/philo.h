@@ -76,6 +76,6 @@ void	get_forks(t_philo *philo);
 void	*routine(t_philo *philo);
 void	check_death(t_info *info);
 void	join_threads(t_info *info);
-void detach_threads(t_info *info);
+void	detach_thread(pthread_t thread);
 
 #endif

@@ -30,9 +30,9 @@ int	since_last_meal(t_philo *philo)
 {
 	long	now;
 
-	pthread_mutex_lock(&philo->info->time_lock);
+	pthread_mutex_lock(&philo->info->death_lock);
 	now = get_timestamp();
-	pthread_mutex_unlock(&philo->info->time_lock);
+	pthread_mutex_unlock(&philo->info->death_lock);
 	return (now - philo->eat_timestamp);
 }
 

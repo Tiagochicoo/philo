@@ -18,19 +18,22 @@ void	stop_meal(t_info *info)
 
 	i = 0;
 	while (i < info->num)
-		pthread_detach(info->philos[i++]->thread);
-	i = 0;
-	while (i < info->num)
 	{
-		if (pthread_mutex_destroy(&info->forks[i]))
-			break ;
-        i++;
+		if (info->philos[i]->thread)
+			pthread_detach(info->philos[i++]->thread);
 	}
+	// i = 0;
+	// while (i < info->num)
+	// {
+	// 	if (pthread_mutex_destroy(&info->forks[i]))
+	// 		break ;
+    //     i++;
+	// }
 	//pthread_mutex_unlock(&info->print_lock);
 	//pthread_mutex_unlock(&info->death_lock);
 	//pthread_mutex_destroy(&info->print_lock);
 	//pthread_mutex_destroy(&info->death_lock);
-	free(info->forks);
+	//free(info->forks);
 	//free(info->philos);
 	//free(info);
 	exit (1);
@@ -49,14 +52,8 @@ void	join_threads(t_info *info)
 	}
 }
 
-void	detach_threads(t_info *info)
+void	detach_thread(pthread_t thread)
 {
-	int i;
-
-	i = 0;
-	while (i < info->num)
-	{
-		pthread_detach(info->philos[i]->thread);
-		printf("Detached thread %d!!\n", ++i);
-	}
+	pthread_detach(thread);
+	printf("Detached thread!!\n");
 }
