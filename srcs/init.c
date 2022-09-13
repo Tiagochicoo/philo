@@ -83,10 +83,13 @@ void	check_death(t_info *info)
 		pthread_mutex_unlock(&info->death_lock);
 		pthread_mutex_lock(&info->death_lock);
 		if (num > 0 && info->finish == num)
+		{
+			pthread_mutex_unlock(&info->death_lock);
 			break ;
-		pthread_mutex_unlock(&info->death_lock);
+		}
+		else
+			pthread_mutex_unlock(&info->death_lock);
 	}
-	pthread_mutex_unlock(&info->death_lock);
 }
 
 void	create_philos(t_info *info)

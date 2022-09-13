@@ -104,7 +104,7 @@ void	*start_routine(t_philo *philo)
 	{
 		print_msg("died", philo, RED);
 		philo->info->finish++;
-		join_threads(philo->info);
+		return (NULL);
 	}
 	else if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 		start_routine(philo);
