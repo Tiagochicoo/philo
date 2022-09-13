@@ -41,12 +41,10 @@ void	join_threads(t_info *info)
 	int i;
 
 	i = 0;
-	printf("num = %d\n", info->num);
 	while (i < info->num)
 	{
-		printf("%d\n", i + 1);
-		if (pthread_join(info->philos[i]->thread, NULL))
-			printf("Joined thread %d!!\n", i);
+		if (info->philos[i]->thread)
+			pthread_join(info->philos[i]->thread, NULL);
 		i++;
 	}
 }

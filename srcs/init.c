@@ -77,7 +77,6 @@ void	check_death(t_info *info)
 		if (info->philo_died || info->finish == num)
 		{
 			pthread_mutex_unlock(&info->death_lock);
-			join_threads(info);
 			break ;
 		}
 		pthread_mutex_unlock(&info->death_lock);
