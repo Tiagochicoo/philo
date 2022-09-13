@@ -20,7 +20,10 @@ void	stop_meal(t_info *info)
 	while (i < info->num)
 	{
 		if (info->philos[i]->thread)
+		{
 			pthread_detach(info->philos[i++]->thread);
+			printf("testing %d\n", i);
+		}
 	}
 	// i = 0;
 	// while (i < info->num)

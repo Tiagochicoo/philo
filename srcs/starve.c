@@ -12,6 +12,20 @@
 
 #include "../includes/philo.h"
 
+int	has_starved(t_philo *philo)
+{
+	if (since_last_meal(philo) > philo->info->time_to_die)
+	{
+		printf("test\n");
+		print_msg("died", philo, RED);
+		pthread_mutex_lock(&philo->info->death_lock);
+		philo->info->philo_died = 1;
+		pthread_mutex_unlock(&philo->info->death_lock);
+		stop_meal(philo->info);
+		return (1);
+	}
+	return (0);
+}
 void	is_dead(t_philo *philo)
 {
 	int last_meal;

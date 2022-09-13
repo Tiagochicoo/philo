@@ -95,23 +95,15 @@ void	get_forks(t_philo *philo)
 
 void	*start_routine(t_philo *philo)
 {
+	has_starved(philo);
 	if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
 		get_forks(philo);
 		eat(philo);
 		nap(philo, philo->info->time_to_sleep);
 		think(philo);
-		if (since_last_meal(philo) > philo->info->time_to_die)
-		{
-			print_msg("died", philo, RED);
-			pthread_mutex_lock(&philo->info->death_lock);
-			philo->info->philo_died = 1;
-			pthread_mutex_unlock(&philo->info->death_lock);
-			stop_meal(philo->info);
-			return (NULL);
-		}
-		else
-			start_routine(philo);
+		has_starved(philo);
+		start_routine(philo);
 	}
 	pthread_mutex_lock(&philo->info->death_lock);
 	philo->info->finish++;

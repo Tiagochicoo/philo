@@ -37,28 +37,12 @@ void	create_thread(t_info *info, int	i)
 void	checker(t_info *info)
 {
 	int		i;
-	long	time;
-
-	time = 0;
+	
 	while (1)
 	{
 		i = info->num - 1;
 		while (i)
-		{
-			pthread_mutex_lock(&info->death_lock);
-			time = since_last_meal(info->philos[i]);
-			if (time > info->time_to_die)
-			{
-				info->philos[i]->is_dead = 1;
-				info->philo_died = i;
-				print_msg("died", info->philos[i], RED);
-				pthread_mutex_unlock(&info->death_lock);
-				stop_meal(info);
-				break ;
-			}
-			pthread_mutex_unlock(&info->death_lock);
-			i--;
-		}
+			has_starved(info->philos[i]);
 		if (info->philo_died > 0)
 			break ;
 	}
@@ -73,6 +57,7 @@ void	check_death(t_info *info)
 		num = info->num * info->must_eat;
 	while (1)
 	{
+		checker(info);
 		pthread_mutex_lock(&info->death_lock);
 		if (info->philo_died || info->finish == num)
 		{
@@ -99,7 +84,6 @@ void	create_philos(t_info *info)
 	while (i < info->num)
 		create_thread(info, i++);
 	check_death(info);
-	//checker(info);
 	join_threads(info);
 }
 
