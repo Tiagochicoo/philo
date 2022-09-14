@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/12 23:30:07 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:13:42 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,14 @@ void	checker(t_info *info)
 		i = info->num - 1;
 		while (i)
 			has_starved(info->philos[i]);
+		pthread_mutex_lock(&info->death_lock);
 		if (info->philo_died > 0)
-			break ;
+		{
+			pthread_mutex_unlock(&info->death_lock);
+			break;
+		}
+		else
+			pthread_mutex_unlock(&info->death_lock);
 	}
 }
 

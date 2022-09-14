@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/18 18:54:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/12 23:28:20 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:23:21 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	stop_meal(t_info *info)
 		if (info->philos[i]->thread)
 		{
 			pthread_detach(info->philos[i++]->thread);
-			printf("testing %d\n", i);
+			printf("detached philo %d\n", i);
+			// pthread_join(info->philos[i++]->thread, NULL);
+			// printf("joined philo %d\n", i);
 		}
 	}
 	// i = 0;
@@ -47,6 +49,7 @@ void	join_threads(t_info *info)
 	int i;
 
 	i = 0;
+	printf("Joining threads\n");
 	while (i < info->num)
 	{
 		if (info->philos[i]->thread)
