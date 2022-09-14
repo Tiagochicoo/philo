@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/14 17:13:42 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 19:21:46 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ void	create_thread(t_info *info, int	i)
 	philo->info = info;
 	philo->id = i + 1;
 	philo->is_dead = 0;
-	//pthread_mutex_lock(&philo->info->time_lock);
 	philo->eat_timestamp = get_timestamp();
-	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp, &philo->eat_timestamp);
-	//pthread_mutex_unlock(&philo->info->time_lock);
 	philo->left_fork = &philo->info->forks[i];
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
@@ -89,7 +86,7 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	check_death(info);
+	//check_death(info);
 	join_threads(info);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:27:32 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/31 16:12:29 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 19:27:22 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	has_starved(t_philo *philo)
 {
 	if (since_last_meal(philo) > philo->info->time_to_die)
 	{
-		printf("test\n");
 		print_msg("died", philo, RED);
 		pthread_mutex_lock(&philo->info->death_lock);
 		philo->info->philo_died = 1;

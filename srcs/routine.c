@@ -6,24 +6,11 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/12 23:29:37 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 19:18:36 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-
-//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
-
-
-// void	free_all(void *ptr)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while(ptr[i])
-// 		free(ptr[i++]);
-// }
 
 void	think(t_philo *philo)
 {
@@ -67,47 +54,60 @@ void	drop_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	//printf("philo %d eat_timestamp = %ld at -> %p\n", philo->id, philo->eat_timestamp % 1000, &philo->eat_timestamp);
-	print_msg("is eating", philo, PURPLE);
-	philo->meals++;
-	//pthread_mutex_lock(&philo->info->death_lock);
-	philo->eat_timestamp = get_timestamp();
-	//pthread_mutex_unlock(&philo->info->death_lock);
-	usleep(philo->info->time_to_eat * 1000);
-	drop_forks(philo);
-}
-
-void	get_forks(t_philo *philo)
-{
-	if (philo->id % 2 == 0)
+	pthread_mutex_lock(&philo->info->death_lock);
+	if (!philo->info->philo_died)
 	{
-		pthread_mutex_lock(philo->left_fork);
-		pthread_mutex_lock(philo->right_fork);
+		pthread_mutex_unlock(&philo->info->death_lock);
+		print_msg("is eating", philo, PURPLE);
+		philo->meals++;
+		philo->eat_timestamp = get_timestamp();
+		usleep(philo->info->time_to_eat * 1000);
+		drop_forks(philo);
 	}
 	else
+		pthread_mutex_unlock(&philo->info->death_lock);
+}
+
+void	*get_forks(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->info->death_lock);
+	if (!philo->info->philo_died)
 	{
-		pthread_mutex_lock(philo->right_fork);
-		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_unlock(&philo->info->death_lock);
+		if (philo->id % 2 == 0)
+		{
+			pthread_mutex_lock(philo->left_fork);
+			pthread_mutex_lock(philo->right_fork);
+		}
+		else
+		{
+			pthread_mutex_lock(philo->right_fork);
+			pthread_mutex_lock(philo->left_fork);
+		}
+		print_msg("has taken a fork", philo, BLUE);
+		print_msg("has taken a fork", philo, BLUE);
 	}
-	print_msg("has taken a fork", philo, BLUE);
-	print_msg("has taken a fork", philo, BLUE);
+	else
+		pthread_mutex_unlock(&philo->info->death_lock);
+	return (NULL);
 }
 
 void	*start_routine(t_philo *philo)
 {
-	has_starved(philo);
 	if (philo->info->must_eat && philo->meals != philo->info->must_eat)
 	{
 		get_forks(philo);
 		eat(philo);
 		nap(philo, philo->info->time_to_sleep);
 		think(philo);
-		has_starved(philo);
 		start_routine(philo);
 	}
-	pthread_mutex_lock(&philo->info->death_lock);
-	philo->info->finish++;
-	pthread_mutex_unlock(&philo->info->death_lock);
+	else
+	{
+		pthread_mutex_lock(&philo->info->death_lock);
+		philo->info->finish++;
+		pthread_mutex_unlock(&philo->info->death_lock);
+	}
 	return (NULL);
 }
 
