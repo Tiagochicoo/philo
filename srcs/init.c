@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/31 09:24:38 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/15 17:15:43 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ void	create_thread(t_info *info, int	i)
 	philo->is_dead = 0;
 	philo->eat_timestamp = get_timestamp();
 	philo->left_fork = &philo->info->forks[i];
-	philo->right_fork = &philo->info->forks[i + 1 ];
+	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
+	printf("Created philo %d at %p\n", i, &philo->thread);
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
 		printf("Error creating philo %d!!\n", i + 1);
 }
@@ -43,7 +44,6 @@ void	checker(t_info *info)
 		while (info->philos[i])
 		{
 			time = since_last_meal(info->philos[i]);
-			//printf("[%d] now -> %ld\ntime -> %ld\n", i + 1,  now, time);
 			if (time > info->time_to_die)
 			{
 				pthread_mutex_lock(&info->death_lock);
@@ -71,7 +71,7 @@ void	create_philos(t_info *info)
 		create_thread(info, i);
 		i++;
 	}
-	//check_death_meals(info);
+	//check_death_mealz(info);
 	checker(info);
 	i = 0;
 	while (i < info->num)
@@ -98,6 +98,8 @@ void	create_forks(t_info *info)
 		else
 			error("Error!! Failed to create fork!\n");
 	}
+	pthread_mutex_init(&info->print_lock, NULL);
+	pthread_mutex_init(&info->death_lock, NULL);
 }
 
 //need better parsing here -> check "1a" arguments
