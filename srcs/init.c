@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/14 19:21:46 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/14 20:09:34 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	checker(t_info *info)
 	{
 		i = info->num - 1;
 		while (i)
-			has_starved(info->philos[i]);
+			has_starved(info->philos[i--]);
 		pthread_mutex_lock(&info->death_lock);
 		if (info->philo_died > 0)
 		{
@@ -62,7 +62,7 @@ void	check_death(t_info *info)
 	{
 		checker(info);
 		pthread_mutex_lock(&info->death_lock);
-		if (info->philo_died || info->finish == num)
+		if (info->philo_died > 0 || info->finish == num)
 		{
 			pthread_mutex_unlock(&info->death_lock);
 			break ;
@@ -86,7 +86,7 @@ void	create_philos(t_info *info)
 	i = 0;
 	while (i < info->num)
 		create_thread(info, i++);
-	//check_death(info);
+	checker(info);
 	join_threads(info);
 }
 
