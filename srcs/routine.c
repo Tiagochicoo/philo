@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/15 17:32:02 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/15 17:58:31 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void	start_routine(t_philo *philo)
 
 void	*routine(t_philo *philo)
 {
+	printf("Routine %d at %p\n", philo->id, &philo->thread);
 	if (philo->id % 2 == 0)
 		usleep(500);
 	pthread_mutex_lock(&philo->info->death_lock);

@@ -6,13 +6,13 @@
 #    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/09/15 17:06:14 by tpereira         ###   ########.fr        #
+#    Updated: 2022/09/15 17:57:38 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 SRCS	=	./srcs/*.c
 INC		=	./includes/*.h
 MAKEFLAGS += --silent

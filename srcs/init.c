@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/15 17:15:43 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/16 17:45:07 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void	create_thread(t_info *info, int	i)
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
-	printf("Created philo %d at %p\n", i, &philo->thread);
-	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo) != 0)
+	if (!pthread_create(&philo->thread, NULL, (void *)&routine, philo))
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
@@ -72,7 +71,7 @@ void	create_philos(t_info *info)
 		i++;
 	}
 	//check_death_mealz(info);
-	checker(info);
+	//checker(info);
 	i = 0;
 	while (i < info->num)
 	{
