@@ -27,37 +27,13 @@ void	create_thread(t_info *info, int	i)
 	philo->right_fork = &philo->info->forks[philo->id % info->num];
 	philo->meals = 0;
 	philo->info->philos[i] = philo;
-	if (!pthread_create(&philo->thread, NULL, (void *)&routine, philo))
+	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo))
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
 void	checker(t_info *info)
 {
-	int		i;
-	long	time;
-
-	time = 0;
-	while (1)
-	{
-		i = info->num - 1;
-		while (info->philos[i])
-		{
-			time = since_last_meal(info->philos[i]);
-			if (time > info->time_to_die)
-			{
-				pthread_mutex_lock(&info->death_lock);
-				info->philos[i]->is_dead = 1;
-				info->philo_died = i;
-				print_msg("has died", info->philos[i], RED);
-				pthread_mutex_unlock(&info->death_lock);
-				stop_meal(info);
-				break ;
-			}
-			i--;
-		}
-		if (info->philo_died > 0)
-			break ;
-	}
+	stop_meal(info);
 }
 
 void	create_philos(t_info *info)
@@ -71,15 +47,7 @@ void	create_philos(t_info *info)
 		i++;
 	}
 	//check_death_mealz(info);
-	//checker(info);
-	i = 0;
-	while (i < info->num)
-	{
-		pthread_join(info->philos[i]->thread, NULL);
-		pthread_mutex_lock(&info->print_lock);
-		printf("Joined thread %d!!\n", ++i);
-		pthread_mutex_unlock(&info->print_lock);
-	}
+	checker(info);
 }
 
 void	create_forks(t_info *info)
@@ -92,12 +60,17 @@ void	create_forks(t_info *info)
 		return (error("Failed to malloc forks!\n"));
 	while (i < info->num)
 	{
-		if (!pthread_mutex_init(&info->forks[i], NULL))
-			i++;
-		else
+		if (pthread_mutex_init(&info->forks[i], NULL))
+		{
 			error("Error!! Failed to create fork!\n");
+			break ;
+		}
+		else
+		{
+			printf("init mutex %d at -> %p\n", i, &info->forks[i]);
+			i++;
+		}
 	}
-	pthread_mutex_init(&info->print_lock, NULL);
 	pthread_mutex_init(&info->death_lock, NULL);
 }
 

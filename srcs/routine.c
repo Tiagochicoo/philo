@@ -12,14 +12,17 @@
 
 #include "../includes/philo.h"
 
-// void	free_all(void *ptr)
-// {
-// 	int i;
+void	free_all(t_philo *ptr)
+{
+	int	i;
 
-// 	i = 0;
-// 	while(ptr[i])
-// 		free(ptr[i++]);
-// }
+	i = 0;
+	while(&ptr[i])
+	{
+		free(ptr);
+		ptr++;
+	}
+}
 
 void	stop_meal(t_info *info)
 {
@@ -28,12 +31,8 @@ void	stop_meal(t_info *info)
 	i = 0;
 	while (i < info->num)
 	{
-		if (&info->philos[i]->thread != NULL)
-		{
-			printf("attempting to join thread %d\n", i);
-			pthread_join(info->philos[i]->thread, NULL);
-			printf("joined thread %d\n", i);
-		}
+		if (pthread_join(info->philos[i]->thread, NULL))
+			break ;
 		i++;
 	}
 	i = 0;
@@ -43,12 +42,11 @@ void	stop_meal(t_info *info)
 			break ;
 		i++;
 	}
-	//pthread_mutex_unlock(&info->death_lock);
-	pthread_mutex_destroy(&info->print_lock);
 	pthread_mutex_destroy(&info->death_lock);
+	//free_all(info->philos[0]);
 	free(info->forks);
-	free(info->philos);
 	//free(info);
+	printf("exit\n");
 	exit (1);
 }
 
@@ -63,15 +61,15 @@ void	think(t_philo *philo)
 
 void	nap(t_philo *philo, int	sleep_time)
 {
-	pthread_mutex_lock(&philo->info->print_lock);
+	pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->is_dead)
 	{
-		pthread_mutex_unlock(&philo->info->print_lock);
+		pthread_mutex_unlock(&philo->info->death_lock);
 		print_msg("is sleeping", philo, GREEN);
 		usleep(sleep_time * 1000);
 	}
 	else
-		pthread_mutex_unlock(&philo->info->print_lock);
+		pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	drop_forks(t_philo *philo)
@@ -90,7 +88,6 @@ void	drop_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	//add drop_forks()
 	pthread_mutex_lock(&philo->info->death_lock);
 	philo->eat_timestamp = get_timestamp();
 	pthread_mutex_unlock(&philo->info->death_lock);
@@ -115,6 +112,8 @@ void	eat(t_philo *philo)
 
 void	get_forks(t_philo *philo)
 {
+	if (philo->id % 2 == 0)
+		usleep(500);
 	pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->is_dead)
 	{
@@ -157,9 +156,6 @@ void	start_routine(t_philo *philo)
 
 void	*routine(t_philo *philo)
 {
-	printf("Routine %d at %p\n", philo->id, &philo->thread);
-	if (philo->id % 2 == 0)
-		usleep(500);
 	pthread_mutex_lock(&philo->info->death_lock);
 	if (philo->info->num != 1 && !philo->is_dead)
 	{

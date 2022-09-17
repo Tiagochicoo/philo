@@ -50,7 +50,6 @@ typedef struct s_info
 	struct timeval		start_time;
 	struct s_philo		**philos;
 	pthread_mutex_t		*forks;
-	pthread_mutex_t		print_lock;
 	pthread_mutex_t		death_lock;
 }				t_info;
 
