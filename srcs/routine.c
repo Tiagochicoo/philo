@@ -166,7 +166,7 @@ void	*routine(t_philo *philo)
 	else
 	{
 		pthread_mutex_unlock(&philo->info->death_lock);
-		//check_death_meals(philo);
+		check_death_meals(philo);
 	}
 	return (NULL);
 }

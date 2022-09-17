@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Sat Sep 17 11:15:46 2022
+# Make data base, printed on Sat Sep 17 12:19:35 2022
 
 # Variables
 
@@ -305,7 +305,6 @@ all:
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
- 
 # automatic
 # @ := all
 # automatic
@@ -313,6 +312,7 @@ all:
 # automatic
 # < := 
 # automatic
+ 
 # + := 
 # automatic
 # % := 
@@ -342,7 +342,7 @@ fclean: clean
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-09-17 11:15:40.390855242
+#  Last modified 2022-09-17 12:19:28.593813041
 #  File has been updated.
 #  Successfully updated.
 
@@ -378,6 +378,6 @@ cc: all
 # strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/43=0%
-# Finished Make data base on Sat Sep 17 11:15:46 2022
+# Finished Make data base on Sat Sep 17 12:19:35 2022
 
  

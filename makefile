@@ -12,7 +12,7 @@
 
 NAME	=	philo
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 SRCS	=	./srcs/*.c
 INC		=	./includes/*.h
 MAKEFLAGS += --silent
