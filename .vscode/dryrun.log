@@ -1,9 +1,9 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/goinfre/tpereira/philo'
-gcc -Wall -Wextra -Werror -pthread -g -Ofast ./srcs/*.c -o philo
+make --dry-run --keep-going --print-directory
+make: Entering directory '/sgoinfre/tpereira/42Cursus/philos'
+gcc -Wall -Wextra -Werror -pthread -g ./srcs/*.c -o philo
 printf "\e[38;5;46m ╔════════════════════════════════════╗\e[0m\n"
 printf "\e[38;5;46m█▓▒░	      Philo Project         ░▒▓█ \e[0m\n"
 printf "\e[38;5;46m█▓▒░		Compiled	    ░▒▓█ \e[0m\n"
 printf "\e[38;5;46m ╚════════════════════════════════════╝\e[0m\n"
-make: Leaving directory '/goinfre/tpereira/philo'
+make: Leaving directory '/sgoinfre/tpereira/42Cursus/philos'
  

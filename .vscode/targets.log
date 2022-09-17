@@ -5,8 +5,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
+ 
 
-# Make data base, printed on Tue Aug 23 18:56:54 2022
+# Make data base, printed on Sat Sep 17 11:15:46 2022
 
 # Variables
 
@@ -17,7 +18,7 @@ LC_ALL = C
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-XW5LR1
+GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-AK6OS1
 # environment
 SBX_CHROME_API_RQ = 1
 # environment
@@ -37,7 +38,7 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
 .VARIABLES := 
 # environment
-PWD = /goinfre/tpereira/philo
+PWD = /sgoinfre/tpereira/42Cursus/philos
 # environment
 ZYPAK_ZYGOTE_STRATEGY_SPAWN = 1
 # automatic
@@ -51,9 +52,9 @@ XDG_DATA_DIRS = /app/share:/usr/share:/usr/share/runtime/share:/run/host/user-sh
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /nfs/homes/tpereira/.var/app/com.visualstudio.code/config/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
+VSCODE_CODE_CACHE_PATH = /nfs/homes/tpereira/.var/app/com.visualstudio.code/config/Code/CachedData/da76f93349a72022ca4670c1b84860304616aaa2
 # environment
-XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session1
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session10
 # environment
 LANG = C
 # environment
@@ -69,9 +70,9 @@ MAKEFLAGS = pqrRs
 # environment
 ZYPAK_SPAWN_LATEST_ON_REEXEC = 0
 # makefile
-CURDIR := /goinfre/tpereira/philo
+CURDIR := /sgoinfre/tpereira/42Cursus/philos
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # makefile (from 'makefile', line 16)
 SRCS = ./srcs/*.c
 # automatic
@@ -101,7 +102,7 @@ FLATPAK_SANDBOX_DIR = /nfs/homes/tpereira/.var/app/com.visualstudio.code/sandbox
 # environment
 VSCODE_PID = 23
 # environment
-KRB5CCNAME = FILE:/tmp/krb5cc_10180_5ty994
+KRB5CCNAME = FILE:/tmp/krb5cc_10180_LHUjg5
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -113,7 +114,7 @@ XDG_DATA_HOME = /nfs/homes/tpereira/.var/app/com.visualstudio.code/data
 # environment
 SANDBOX_LD_PRELOAD = /app/bin/../lib/libzypak-preload-host.so:/app/bin/../lib/libzypak-preload-host-spawn-strategy.so
 # environment
-SESSION_MANAGER = local/c2r3s3.42lisboa.com:@/tmp/.ICE-unix/12954,unix/c2r3s3.42lisboa.com:/tmp/.ICE-unix/12954
+SESSION_MANAGER = local/c2r1s5.42lisboa.com:@/tmp/.ICE-unix/394719,unix/c2r1s5.42lisboa.com:/tmp/.ICE-unix/394719
 # automatic
 *F = $(notdir $*)
 # environment
@@ -201,15 +202,15 @@ DISPLAY = :99.0
 # default
 MAKE_VERSION := 4.3
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 13536
+GIO_LAUNCHED_DESKTOP_FILE_PID = 395346
 # environment
-SSH_AGENT_PID = 13052
+SSH_AGENT_PID = 394840
 # environment
 _ = /usr/bin/make
 # environment
 XDG_RUNTIME_DIR = /run/user/10180
 # makefile (from 'makefile', line 15)
-CFLAGS = -Wall -Wextra -Werror -pthread -g -Ofast
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 # environment
 GPG_AGENT_INFO = /run/user/10180/gnupg/S.gpg-agent:0:1
 # environment
@@ -221,7 +222,7 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/10180/vscode-106f4a75-1.69.2-main.sock
+VSCODE_IPC_HOOK = /run/user/10180/vscode-106f4a75-1.70.0-main.sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -257,9 +258,9 @@ GDMSESSION = ubuntu
 
 # Directories
 
-# . (device 64769, inode 1177348): 9 files, no impossibilities.
+# . (device 59, inode 26280026): 10 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 10 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -283,7 +284,6 @@ clean:
 	printf "\e[31;5;200m ╔════════════════════════════════════╗\e[0m\n"
 	printf "\e[31;5;200m░▒▓█         Clean complete  	    █▓▒░\e[0m\n"
 	printf "\e[31;5;200m ╚════════════════════════════════════╝\e[0m\n"
- 
 
 re: fclean all
 #  Phony target (prerequisite of .PHONY).
@@ -305,6 +305,7 @@ all:
 #  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
+ 
 # automatic
 # @ := all
 # automatic
@@ -341,7 +342,7 @@ fclean: clean
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-08-23 16:27:30.578929134
+#  Last modified 2022-09-17 11:15:40.390855242
 #  File has been updated.
 #  Successfully updated.
 
@@ -371,12 +372,12 @@ cc: all
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 125 B / avg = 6 B
-# current buf: size = 8162 B / used = 125 B / count = 19 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 130 B / avg = 6 B
+# current buf: size = 8162 B / used = 130 B / count = 20 / avg = 6 B
 
-# strcache performance: lookups = 42 / hit rate = 54%
+# strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
-# Load=19/8192=0%, Rehash=0, Collisions=0/42=0%
-# Finished Make data base on Tue Aug 23 18:56:54 2022
+# Load=20/8192=0%, Rehash=0, Collisions=0/43=0%
+# Finished Make data base on Sat Sep 17 11:15:46 2022
 
  

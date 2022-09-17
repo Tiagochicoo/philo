@@ -12,16 +12,19 @@
 
 #include "../includes/philo.h"
 
-void	free_all(t_philo *ptr)
+void	free_all(t_info *info)
 {
 	int	i;
 
 	i = 0;
-	while(&ptr[i])
+	while (i < info->num)
 	{
-		free(ptr);
-		ptr++;
+		printf("philo %d at -> %p\n", i, info->philos[i]);
+		free(info->philos[i]);
+		i++;
 	}
+	free(info->philos);
+	free(info->forks);
 }
 
 void	stop_meal(t_info *info)
@@ -43,9 +46,7 @@ void	stop_meal(t_info *info)
 		i++;
 	}
 	pthread_mutex_destroy(&info->death_lock);
-	//free_all(info->philos[0]);
-	free(info->forks);
-	//free(info);
+	free_all(info);
 	printf("exit\n");
 	exit (1);
 }

@@ -65,11 +65,7 @@ void	create_forks(t_info *info)
 			error("Error!! Failed to create fork!\n");
 			break ;
 		}
-		else
-		{
-			printf("init mutex %d at -> %p\n", i, &info->forks[i]);
-			i++;
-		}
+		i++;
 	}
 	pthread_mutex_init(&info->death_lock, NULL);
 }
@@ -106,7 +102,7 @@ void	set_params(t_info *info, char **argv)
 			info->must_eat = atoi(argv[5]);
 		else
 			info->must_eat = -1;
-		info->philos = malloc(sizeof(t_philo) * info->num);
+		info->philos = malloc(sizeof(t_philo *) * info->num);
 		gettimeofday(&info->start_time, NULL);
 	}
 	else
