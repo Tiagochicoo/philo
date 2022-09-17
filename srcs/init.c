@@ -33,7 +33,32 @@ void	create_thread(t_info *info, int	i)
 
 void	checker(t_info *info)
 {
-	stop_meal(info);
+	int	i;
+	int	time;
+
+	i = 0;
+	time = 0;
+	if (!info->philo_died)
+	{
+		while (1)
+		{
+			while (i < info->num)
+			{
+				time = since_last_meal(info->philos[i]);
+				if (time > info->time_to_die)
+				{
+					pthread_mutex_lock(&info->death_lock);
+					info->philo_died = 1;
+					pthread_mutex_unlock(&info->death_lock);
+					break ;
+				}
+				i++;
+			}
+			stop_meal(info);
+		}
+	}
+	else
+		pthread_mutex_unlock(&info->death_lock);
 }
 
 void	create_philos(t_info *info)
@@ -46,7 +71,6 @@ void	create_philos(t_info *info)
 		create_thread(info, i);
 		i++;
 	}
-	//check_death_mealz(info);
 	checker(info);
 }
 
