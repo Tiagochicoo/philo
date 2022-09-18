@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/15 17:58:31 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/18 18:35:23 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,7 @@ void	free_all(t_info *info)
 
 	i = 0;
 	while (i < info->num)
-	{
-		printf("philo %d at -> %p\n", i, info->philos[i]);
-		free(info->philos[i]);
-		i++;
-	}
+		free(info->philos[i++]);
 	free(info->philos);
 	free(info->forks);
 }
@@ -142,7 +138,7 @@ void	start_routine(t_philo *philo)
 	if (philo->info->philo_died < 1)
 	{
 		pthread_mutex_unlock(&philo->info->death_lock);
-		if (philo->info->must_eat && philo->meals != philo->info->must_eat)
+		if (philo->meals != philo->info->must_eat)
 		{
 			get_forks(philo);
 			eat(philo);
@@ -150,6 +146,8 @@ void	start_routine(t_philo *philo)
 			think(philo);
 			routine(philo);
 		}
+		else
+			philo->info->finish++;
 	}
 	else
 		pthread_mutex_unlock(&philo->info->death_lock);
@@ -164,9 +162,6 @@ void	*routine(t_philo *philo)
 		start_routine(philo);
 	}
 	else
-	{
 		pthread_mutex_unlock(&philo->info->death_lock);
-		check_death_meals(philo);
-	}
 	return (NULL);
 }

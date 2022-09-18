@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/16 17:45:07 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/18 18:40:56 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,34 +31,60 @@ void	create_thread(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
-void	checker(t_info *info)
+void	is_philo_dead(t_info *info)
 {
-	int	i;
-	int	time;
+	int i;
 
 	i = 0;
-	time = 0;
-	if (!info->philo_died)
+	while (i < info->num && !info->philo_died)
+	{
+		pthread_mutex_lock(&info->death_lock);
+		if (elapsed_time(info->philos[i]) > info->time_to_die)
+		{
+			print_msg("has died", info->philos[i], RED);
+			info->philo_died = 1;
+			pthread_mutex_unlock(&info->death_lock);
+			break;
+		}
+		if (info->finish == info->num)
+		{
+			info->philo_died = 1;
+			pthread_mutex_unlock(&info->death_lock);
+			break;
+		}
+		pthread_mutex_unlock(&info->death_lock);
+		i++;
+	}
+}
+
+void	checker(t_info *info)
+{
+	if (info->num == 1)
+	{
+		pthread_mutex_lock(&info->forks[0]);
+		print_msg("has taken the left fork", info->philos[0], BLUE);
+		usleep(info->time_to_die * 1000);
+		print_msg("has died", info->philos[0], RED);
+		pthread_mutex_unlock(&info->forks[0]);
+		pthread_mutex_lock(&info->death_lock);
+		info->philo_died = 1;
+		pthread_mutex_unlock(&info->death_lock);
+	}
+	else
 	{
 		while (1)
 		{
-			while (i < info->num)
+			is_philo_dead(info);
+			pthread_mutex_lock(&info->death_lock);
+			if (info->philo_died)
 			{
-				time = since_last_meal(info->philos[i]);
-				if (time > info->time_to_die)
-				{
-					pthread_mutex_lock(&info->death_lock);
-					info->philo_died = 1;
-					pthread_mutex_unlock(&info->death_lock);
-					break ;
-				}
-				i++;
+				pthread_mutex_unlock(&info->death_lock);
+				break ;
 			}
-			stop_meal(info);
+			pthread_mutex_unlock(&info->death_lock);
 		}
 	}
-	else
-		pthread_mutex_unlock(&info->death_lock);
+	stop_meal(info);
 }
 
 void	create_philos(t_info *info)
