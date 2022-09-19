@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/18 18:40:56 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/19 16:52:14 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	create_thread(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
-void	is_philo_dead(t_info *info)
+int	is_philo_dead(t_info *info)
 {
 	int i;
 
@@ -39,22 +39,24 @@ void	is_philo_dead(t_info *info)
 	while (i < info->num && !info->philo_died)
 	{
 		pthread_mutex_lock(&info->death_lock);
-		if (elapsed_time(info->philos[i]) > info->time_to_die)
+		if (since_last_meal(info->philos[i]) > info->time_to_die)
 		{
 			print_msg("has died", info->philos[i], RED);
 			info->philo_died = 1;
+			info->philos[i]->is_dead = 1;
 			pthread_mutex_unlock(&info->death_lock);
-			break;
+			return (1);
 		}
 		if (info->finish == info->num)
 		{
 			info->philo_died = 1;
 			pthread_mutex_unlock(&info->death_lock);
-			break;
+			return (1);
 		}
 		pthread_mutex_unlock(&info->death_lock);
 		i++;
 	}
+	return (0);
 }
 
 void	checker(t_info *info)
@@ -65,24 +67,17 @@ void	checker(t_info *info)
 		print_msg("has taken the left fork", info->philos[0], BLUE);
 		usleep(info->time_to_die * 1000);
 		print_msg("has died", info->philos[0], RED);
-		pthread_mutex_unlock(&info->forks[0]);
 		pthread_mutex_lock(&info->death_lock);
 		info->philo_died = 1;
 		pthread_mutex_unlock(&info->death_lock);
+		pthread_mutex_unlock(&info->forks[0]);
 	}
 	else
 	{
 		while (1)
-		{
-			is_philo_dead(info);
-			pthread_mutex_lock(&info->death_lock);
-			if (info->philo_died)
-			{
-				pthread_mutex_unlock(&info->death_lock);
+			if (is_philo_dead(info))
 				break ;
-			}
-			pthread_mutex_unlock(&info->death_lock);
-		}
+		printf("exit checker\n");
 	}
 	stop_meal(info);
 }
