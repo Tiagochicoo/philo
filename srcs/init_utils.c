@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 21:24:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:24:22 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:37:17 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_philo_dead(t_info *info)
 		{
 			kill_all(info);
 			info->philos[i]->is_dead = 1;
-			print_msg("has died", info->philos[i], RED);
+			print_msg("died", info->philos[i], RED);
 			pthread_mutex_unlock(&info->death_lock);
 			return (1);
 		}
@@ -60,7 +60,7 @@ void	checker(t_info *info)
 		pthread_mutex_lock(&info->forks[0]);
 		print_msg("has taken the left fork", info->philos[0], BLUE);
 		usleep(info->time_to_die * 1000);
-		print_msg("has died", info->philos[0], RED);
+		print_msg("died", info->philos[0], RED);
 		pthread_mutex_lock(&info->death_lock);
 		info->philo_died = 1;
 		pthread_mutex_unlock(&info->death_lock);
