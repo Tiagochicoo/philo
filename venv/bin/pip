@@ -1,4 +1,4 @@
-#!/goinfre/tpereira/philo/venv/bin/python3
+#!/media/psf/Desktop/42Cursus/philo/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

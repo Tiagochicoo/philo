@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/08/24 16:49:50 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:27:22 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ int	main(int argc, char **argv)
 		create_forks(&info);
 		create_philos(&info);
 	}
-	else //check/fix norm here
-		printf("Usage: \"./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\"\n");
+	else
+	{
+		printf("Usage: \"./philo number_of_philosophers time_to_die");
+		printf("time_to_eat time_to_sleep");
+		printf("[number_of_times_each_philosopher_must_eat]\"\n");
+	}
 	return (0);
 }

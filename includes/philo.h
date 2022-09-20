@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/30 19:24:23 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/15 17:13:02 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:33:14 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,10 @@ void	drop_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	get_forks(t_philo *philo);
 void	*routine(t_philo *philo);
+void	checker(t_info *info);
+void	stop_meal(t_info *info);
+void	free_all(t_info *info);
+void	think(t_philo *philo);
+void	start_routine(t_philo *philo);
 
 #endif

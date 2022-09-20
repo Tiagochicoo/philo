@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/19 15:53:47 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:28:25 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ long	elapsed_time(t_philo *philo)
 	long	start;
 
 	now = get_timestamp();
-	start = (philo->info->start_time.tv_sec * 1000) + (philo->info->start_time.tv_usec / 1000);
+	start = (philo->info->start_time.tv_sec * 1000)
+		+ (philo->info->start_time.tv_usec / 1000);
 	return (now - start);
 }
 
@@ -50,7 +51,6 @@ int	print_msg(char *msg, t_philo *philo, char *color)
 	long	timestamp;
 
 	timestamp = elapsed_time(philo);
-	// insert death_lock mutex here??
 	printf("%s%ld %d %s\n%s", color, timestamp, philo->id, msg, RESET);
 	return (timestamp);
 }
