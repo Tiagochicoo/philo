@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+         #
+#    By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/30 18:56:21 by tpereira          #+#    #+#              #
-#    Updated: 2022/09/19 14:40:01 by tpereira         ###   ########.fr        #
+#    Updated: 2022/09/20 20:06:55 by tpereira         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -pthread -g -fsanitize=thread
+CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 SRCS	=	./srcs/*.c
 INC		=	./includes/*.h
 MAKEFLAGS += --silent
