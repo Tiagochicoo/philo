@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:24:29 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:47:12 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ int	check_args(char **argv)
 	i = 1;
 	while (argv[i])
 	{
-		num = atoi(argv[i]);
+		if (!ft_isnumber(argv[i]))
+			return (0);
+		num = ft_atoi(argv[i]);
 		if (num < 1)
 			return (0);
 		else
@@ -86,19 +88,19 @@ void	set_params(t_info *info, char **argv)
 {
 	if (check_args(argv))
 	{
-		info->num = atoi(argv[1]);
-		info->time_to_die = atoi(argv[2]);
-		info->time_to_eat = atoi(argv[3]);
-		info->time_to_sleep = atoi(argv[4]);
+		info->num = ft_atoi(argv[1]);
+		info->time_to_die = ft_atoi(argv[2]);
+		info->time_to_eat = ft_atoi(argv[3]);
+		info->time_to_sleep = ft_atoi(argv[4]);
 		info->finish = 0;
 		info->philo_died = 0;
 		if (argv[5])
-			info->must_eat = atoi(argv[5]);
+			info->must_eat = ft_atoi(argv[5]);
 		else
 			info->must_eat = -1;
 		info->philos = malloc(sizeof(t_philo *) * info->num);
 		gettimeofday(&info->start_time, NULL);
 	}
 	else
-		error("Error! Invalid arguments\n");
+		error("Error! Invalid arguments");
 }

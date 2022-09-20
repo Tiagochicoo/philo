@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:30:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:28:25 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:48:34 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error(char *msg)
 {
-	printf("%s\n", msg);
+	printf("%s%s\n%s", RED, msg, RESET);
 	exit(1);
 }
 

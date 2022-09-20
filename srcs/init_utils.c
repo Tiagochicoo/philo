@@ -6,7 +6,7 @@
 /*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 21:24:04 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:37:17 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 21:45:32 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,49 @@ void	checker(t_info *info)
 				break ;
 	}
 	stop_meal(info);
+}
+
+int	ft_atoi(const char *str)
+{
+	int			sign;
+	long long	num;
+
+	sign = 1;
+	num = 0;
+	while (*str == '\t' || *str == '\n' || *str == '\v'
+		|| *str == '\f' || *str == '\r' || *str == ' ')
+		str++;
+	if (*str == '-')
+	{
+		sign *= -1;
+		str++;
+	}
+	else if (*str == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+	{
+		num *= 10;
+		num += (sign * (*(str++) - '0'));
+		if (num > 2147483647)
+			return (-1);
+		if (num < -2147483648)
+			return (0);
+	}
+	return (num);
+}
+
+int	ft_isnumber(char *str)
+{
+	int		isnumber;
+
+	isnumber = 0;
+	while (*str)
+	{
+		if (*str >= '0' && *str <= '9')
+			isnumber = 1;
+		else
+			return (0);
+		str++;
+	}	
+	return (isnumber);
 }
