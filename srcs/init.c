@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/19 16:52:14 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:46:22 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ void	create_thread(t_info *info, int	i)
 	philo->info->philos[i] = philo;
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo))
 		printf("Error creating philo %d!!\n", i + 1);
+	else
+	{
+		pthread_mutex_lock(&philo->info->death_lock);
+		philo->info->finish++;
+		pthread_mutex_unlock(&philo->info->death_lock);
+	}
+	printf("%d finish\n", philo->id);
 }
 
 void	kill_all(t_info *info)

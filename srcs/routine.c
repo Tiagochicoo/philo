@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/19 15:54:03 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 18:44:57 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,9 +149,6 @@ void	start_routine(t_philo *philo)
 			pthread_mutex_unlock(&philo->info->death_lock);
 		routine(philo);
 	}
-	pthread_mutex_lock(&philo->info->death_lock);
-	philo->info->finish++;
-	pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	*routine(t_philo *philo)
