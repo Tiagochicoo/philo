@@ -29,6 +29,9 @@ void	create_thread(t_info *info, int	i)
 	philo->info->philos[i] = philo;
 	if (pthread_create(&philo->thread, NULL, (void *)&routine, philo))
 		printf("Error creating philo %d!!\n", i + 1);
+	pthread_mutex_lock(&philo->info->death_lock);
+	philo->info->finish++;
+	pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	kill_all(t_info *info)

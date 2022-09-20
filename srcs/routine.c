@@ -149,9 +149,6 @@ void	start_routine(t_philo *philo)
 			pthread_mutex_unlock(&philo->info->death_lock);
 		routine(philo);
 	}
-	pthread_mutex_lock(&philo->info->death_lock);
-	philo->info->finish++;
-	pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	*routine(t_philo *philo)
