@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 20:25:40 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/19 16:52:14 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/20 19:26:31 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,18 @@ int	is_philo_dead(t_info *info)
 	while (i < info->num && !info->philo_died)
 	{
 		pthread_mutex_lock(&info->death_lock);
+		if (info->finish >= info->num)
+		{
+			kill_all(info);
+			info->philos[i]->is_dead = 1;
+			pthread_mutex_unlock(&info->death_lock);
+			return (1);
+		}
 		if (since_last_meal(info->philos[i]) > info->time_to_die)
 		{
 			kill_all(info);
 			info->philos[i]->is_dead = 1;
 			print_msg("has died", info->philos[i], RED);
-			pthread_mutex_unlock(&info->death_lock);
-			return (1);
-		}
-		if (info->finish == info->num)
-		{
-			info->philo_died = 1;
 			pthread_mutex_unlock(&info->death_lock);
 			return (1);
 		}
