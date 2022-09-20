@@ -30,8 +30,7 @@ void	stop_meal(t_info *info)
 	i = 0;
 	while (i < info->num)
 	{
-		if (pthread_join(info->philos[i]->thread, NULL))
-			break ;
+		pthread_join(info->philos[i]->thread, NULL);
 		i++;
 	}
 	i = 0;
@@ -43,26 +42,33 @@ void	stop_meal(t_info *info)
 	}
 	pthread_mutex_destroy(&info->death_lock);
 	free_all(info);
-	printf("exit\n");
 	exit (1);
 }
 
 void	think(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->is_dead)
 	{
+		pthread_mutex_unlock(&philo->info->death_lock);
 		if (philo->meals != philo->info->must_eat)
 			print_msg("is thinking", philo, YELLOW);
 	}
+	else
+		pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	nap(t_philo *philo, int	sleep_time)
 {
+	pthread_mutex_lock(&philo->info->death_lock);
 	if (!philo->is_dead)
 	{
+		pthread_mutex_unlock(&philo->info->death_lock);
 		print_msg("is sleeping", philo, GREEN);
 		usleep(sleep_time * 1000);
 	}
+	else
+		pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	drop_forks(t_philo *philo)
@@ -82,12 +88,19 @@ void	drop_forks(t_philo *philo)
 void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->info->death_lock);
-	philo->eat_timestamp = get_timestamp();
-	pthread_mutex_unlock(&philo->info->death_lock);
-	print_msg("is eating", philo, PURPLE);
-	philo->meals++;
-	usleep(philo->info->time_to_eat * 1000);
-	drop_forks(philo);
+	if (!philo->is_dead)
+	{
+		pthread_mutex_unlock(&philo->info->death_lock);
+		pthread_mutex_lock(&philo->info->death_lock);
+		philo->eat_timestamp = get_timestamp();
+		pthread_mutex_unlock(&philo->info->death_lock);
+		print_msg("is eating", philo, PURPLE);
+		philo->meals++;
+		usleep(philo->info->time_to_eat * 1000);
+		drop_forks(philo);
+	}
+	else
+		pthread_mutex_unlock(&philo->info->death_lock);
 }
 
 void	get_forks(t_philo *philo)
@@ -102,8 +115,20 @@ void	get_forks(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
 	}
-	print_msg("has taken a fork", philo, BLUE);
-	print_msg("has taken a fork", philo, BLUE);
+	pthread_mutex_lock(&philo->info->death_lock);
+	if (!philo->is_dead)
+	{
+		pthread_mutex_unlock(&philo->info->death_lock);
+		pthread_mutex_lock(&philo->info->death_lock);
+		print_msg("has taken a fork", philo, BLUE);
+		print_msg("has taken a fork", philo, BLUE);
+		pthread_mutex_unlock(&philo->info->death_lock);
+	}
+	else
+	{
+		drop_forks(philo);
+		pthread_mutex_unlock(&philo->info->death_lock);
+	}
 }
 
 void	start_routine(t_philo *philo)
@@ -114,6 +139,14 @@ void	start_routine(t_philo *philo)
 		eat(philo);
 		nap(philo, philo->info->time_to_sleep);
 		think(philo);
+		pthread_mutex_lock(&philo->info->death_lock);
+		if (philo->is_dead)
+		{
+			pthread_mutex_unlock(&philo->info->death_lock);
+			break ;
+		}
+		else
+			pthread_mutex_unlock(&philo->info->death_lock);
 		routine(philo);
 	}
 	pthread_mutex_lock(&philo->info->death_lock);

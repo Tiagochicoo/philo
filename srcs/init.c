@@ -31,6 +31,18 @@ void	create_thread(t_info *info, int	i)
 		printf("Error creating philo %d!!\n", i + 1);
 }
 
+void	kill_all(t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->num)
+	{
+		info->philos[i]->is_dead = 1;
+		i++;
+	}
+}
+
 int	is_philo_dead(t_info *info)
 {
 	int i;
@@ -41,9 +53,9 @@ int	is_philo_dead(t_info *info)
 		pthread_mutex_lock(&info->death_lock);
 		if (since_last_meal(info->philos[i]) > info->time_to_die)
 		{
-			print_msg("has died", info->philos[i], RED);
-			info->philo_died = 1;
+			kill_all(info);
 			info->philos[i]->is_dead = 1;
+			print_msg("has died", info->philos[i], RED);
 			pthread_mutex_unlock(&info->death_lock);
 			return (1);
 		}
@@ -77,7 +89,6 @@ void	checker(t_info *info)
 		while (1)
 			if (is_philo_dead(info))
 				break ;
-		printf("exit checker\n");
 	}
 	stop_meal(info);
 }

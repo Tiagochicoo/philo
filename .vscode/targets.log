@@ -5,9 +5,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Sat Sep 17 12:19:35 2022
+# Make data base, printed on Tue Sep 20 16:19:10 2022
 
 # Variables
 
@@ -18,7 +17,7 @@ LC_ALL = C
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-AK6OS1
+GNOME_KEYRING_CONTROL = /nfs/homes/tpereira/.cache/keyring-DVMVS1
 # environment
 SBX_CHROME_API_RQ = 1
 # environment
@@ -54,7 +53,7 @@ XDG_DATA_DIRS = /app/share:/usr/share:/usr/share/runtime/share:/run/host/user-sh
 # environment
 VSCODE_CODE_CACHE_PATH = /nfs/homes/tpereira/.var/app/com.visualstudio.code/config/Code/CachedData/da76f93349a72022ca4670c1b84860304616aaa2
 # environment
-XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session10
+XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session11
 # environment
 LANG = C
 # environment
@@ -102,7 +101,7 @@ FLATPAK_SANDBOX_DIR = /nfs/homes/tpereira/.var/app/com.visualstudio.code/sandbox
 # environment
 VSCODE_PID = 23
 # environment
-KRB5CCNAME = FILE:/tmp/krb5cc_10180_LHUjg5
+KRB5CCNAME = FILE:/tmp/krb5cc_10180_qAkoi6
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -114,7 +113,7 @@ XDG_DATA_HOME = /nfs/homes/tpereira/.var/app/com.visualstudio.code/data
 # environment
 SANDBOX_LD_PRELOAD = /app/bin/../lib/libzypak-preload-host.so:/app/bin/../lib/libzypak-preload-host-spawn-strategy.so
 # environment
-SESSION_MANAGER = local/c2r1s5.42lisboa.com:@/tmp/.ICE-unix/394719,unix/c2r1s5.42lisboa.com:/tmp/.ICE-unix/394719
+SESSION_MANAGER = local/c2r1s5.42lisboa.com:@/tmp/.ICE-unix/449081,unix/c2r1s5.42lisboa.com:/tmp/.ICE-unix/449081
 # automatic
 *F = $(notdir $*)
 # environment
@@ -202,9 +201,9 @@ DISPLAY = :99.0
 # default
 MAKE_VERSION := 4.3
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 395346
+GIO_LAUNCHED_DESKTOP_FILE_PID = 450037
 # environment
-SSH_AGENT_PID = 394840
+SSH_AGENT_PID = 449186
 # environment
 _ = /usr/bin/make
 # environment
@@ -286,6 +285,7 @@ clean:
 	printf "\e[31;5;200m ╚════════════════════════════════════╝\e[0m\n"
 
 re: fclean all
+ 
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
@@ -312,7 +312,6 @@ all:
 # automatic
 # < := 
 # automatic
- 
 # + := 
 # automatic
 # % := 
@@ -378,6 +377,6 @@ cc: all
 # strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/43=0%
-# Finished Make data base on Sat Sep 17 12:19:35 2022
+# Finished Make data base on Tue Sep 20 16:19:10 2022
 
  
