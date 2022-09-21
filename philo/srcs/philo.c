@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 16:19:22 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:27:22 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/21 17:01:23 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	main(int argc, char **argv)
 {
 	t_info				info;
 
-	if (argc > 4)
+	if (argc > 6)
+		printf("%sError! Too many arguments\n%s", RED, RESET);
+	else if (argc > 4)
 	{
 		set_params(&info, argv);
 		create_forks(&info);
