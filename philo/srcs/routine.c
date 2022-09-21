@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpereira <tpereira@42Lisboa.com>           +#+  +:+       +#+        */
+/*   By: tpereira <tpereira@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 19:32:00 by tpereira          #+#    #+#             */
-/*   Updated: 2022/09/20 21:33:16 by tpereira         ###   ########.fr       */
+/*   Updated: 2022/09/21 17:12:18 by tpereira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ void	get_forks(t_philo *philo)
 
 void	*routine(t_philo *philo)
 {
+	if (philo->id % 2 == 0)
+			usleep(900);
 	pthread_mutex_lock(&philo->info->death_lock);
 	if (philo->info->num != 1 && !philo->info->philo_died)
 	{
 		pthread_mutex_unlock(&philo->info->death_lock);
-		if (philo->id % 2 == 0)
-			usleep(900);
 		start_routine(philo);
 	}
 	else
